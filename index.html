@@ -279,8 +279,8 @@ const PR={};R.forEach(r=>{r.p=r.p||r.id;if(!PR[r.p])PR[r.p]=r});
 const RID={};R.forEach(r=>RID[r.id]=r);
 // Quests. 'make' quests unlock elements; 'stat' quests unlock families.
 const QM=[
-['water','Make Water','C,N'],['co2','Make Carbon dioxide','Na,Cl'],['nacl','Make Salt','S,Ca'],['hcl','Make Hydrochloric acid','Mg,Si'],['so2','Make Sulfur dioxide','P,Al'],['cao','Make Quicklime','Fe,Cu'],['fes','Make Iron sulfide','Zn,Sn'],['h2so4','Make Sulfuric acid, the oil of vitriol','Ag,Hg'],['hgs','Make Cinnabar','Pb'],['aquaregia','Make Aqua regia, royal water','Au'],['auhcl','Dissolve gold: make Liquid gold','']
-].map(a=>({t:'make',r:a[0],txt:a[1],u:a[2]?a[2].split(','):[]}));
+['water','Make Water','C'],['co2','Make Carbon dioxide','N'],['nh3','Make Ammonia','Na'],['na2o','Make Sodium oxide','Cl'],['nacl','Make Salt','S'],['so2','Make Sulfur dioxide','Ca'],['cao','Make Quicklime','Mg'],['mgo','Make Magnesia','Si'],['sio2','Make Silica','P'],['p2o5','Make Phosphorus pentoxide','Al'],['al2o3','Make Alumina','Fe'],['rust','Make Rust','Cu'],['cuo','Make Copper oxide','Zn'],['zno','Make Zinc oxide','Sn'],['sno2','Make Tin oxide','Ag'],['ag2s','Make Silver sulfide','Hg'],['hgs','Make Cinnabar','Pb'],['aquaregia','Make Aqua regia, royal water','Au'],['auhcl','Make Liquid gold','']
+].map(a=>({t:'make',r:a[0],txt:'Make '+PR[a[0]].n,u:a[2]?a[2].split(','):[]}));
 const QS=[
 {k:'rec',n:5,txt:'Brew 5 different compounds',fam:['noble gas'],lab:'the noble gases'},
 {k:'ok',n:3,txt:'Serve 3 orders at 85% or more',fam:['alkali metal'],lab:'the alkali metals'},
@@ -441,7 +441,8 @@ function intro(){const a=P.av;return`<h1>Neon Lab</h1><p class="dim">Chemistry, 
 // ---------- menu
 function reqEl(id,o){o=o||{};const r=RID[id];if(!r){o[id]=1;return o}Object.keys(r.ing).forEach(k=>reqEl(k,o));return o}
 function qAvail(q){return Object.keys(reqEl(q.r)).every(e=>P.el[e])}
-function nextQuest(){for(let i=0;i<QM.length;i++)if(!P.qd['m'+i]&&qAvail(QM[i]))return{i,q:QM[i]};for(let i=0;i<QS.length;i++)if(!P.qd['s'+i])return{i,q:QS[i],s:1};return null}
+function qMig(){QM.forEach((q,i)=>{if(!P.qd['n'+i]&&q.u.length&&q.u.every(e=>P.el[e]))P.qd['n'+i]=1})}
+function nextQuest(){qMig();for(let i=0;i<QM.length;i++)if(!P.qd['n'+i]&&qAvail(QM[i]))return{i,q:QM[i]};for(let i=0;i<QS.length;i++)if(!P.qd['s'+i])return{i,q:QS[i],s:1};return null}
 function menu(){const nq=nextQuest();const nr=Object.keys(P.unl).length;return`<h1>Neon Lab</h1><div class="row"><img src="${char(P.av,'happy')}" width="84" height="96"><div><b>Welcome${P.name?', '+esc(P.name):''}!</b><br><span class="dim sm">${nr}/${Object.keys(PR).length} compounds \u00B7 ${Object.keys(P.el).length}/118 elements \u00B7 ${P.stars}\u2B50</span></div></div>
 ${nq?`<div class="panel glow" style="margin-top:12px"><b class="warn">Next quest:</b> ${esc(nq.q.txt)}<br><span class="dim sm">Unlocks ${nq.s?nq.q.lab:nq.q.u.length?nq.q.u.map(e=>PTS[e][2]).join(' and '):'the last secret of the cabinet'}</span><div style="margin-top:6px"><button class="btn" data-a="go" data-s="table" data-t="quest">See quests</button></div></div>`:'<div class="panel glow">All quests done. The whole table is yours!</div>'}
 <div class="menu" style="margin-top:12px"><button class="mbox" data-a="go" data-s="book"><b>\uD83D\uDCD6 Lab book</b><small>Recipe school</small></button><button class="mbox" data-a="go" data-s="lab"><b>\u2697\uFE0F Free lab</b><small>Mix anything</small></button><button class="mbox" data-a="go" data-s="orders"><b>\uD83E\uDDEA Potion orders</b><small>Clients, timer, stars</small></button><button class="mbox dna" data-a="go" data-s="dnamenu"><b>\uD83E\uDDEC DNA clinic</b><small>Spot and fix mutations</small></button><button class="mbox ask" data-a="go" data-s="table" data-t="table"><b>\u2728 Elements \u2728</b><small>Table &amp; quests</small></button><button class="mbox dna" data-a="go" data-s="bio"><b>\uD83E\uDDEC Biology lab</b><small>Cells, genes, blood</small></button><button class="mbox" data-a="go" data-s="phys"><b>\u269B\uFE0F Physics bench</b><small>Force, light, energy</small></button><button class="mbox" data-a="go" data-s="lb"><b>\uD83C\uDFC6 Scores</b><small>On this device</small></button></div><p class="dim sm" style="text-align:center;margin-top:16px"><a style="color:var(--dim)" href="#" data-a="go" data-s="src">Sources</a> \u00B7 <a style="color:var(--dim)" href="#" data-a="chg">Change alchemist</a></p>`}
@@ -454,20 +455,20 @@ function pantry(){let h='';GRP.forEach(([g,l])=>{const a=l.filter(s=>P.el[s]);if
 function trayHTML(){const c=counts(S.tray);const ks=Object.keys(c);return`<div class="tray ${S.shake?'shake':''}">${ks.length?ks.map(k=>{const e=isEl(k);const col=e?CATCOL[cat(PTS[k])]:PR[k].c;return`<button class="tile" style="--tc:${col}" data-a="rm" data-i="${k}">${e?`<span class="sy">${k}</span>`:`<img src="${flask(col)}" width="30" height="33">`}<span class="nm">${c[k]>1?'\u00D7'+c[k]+' ':''}${esc(nm(k))}</span></button>`}).join(''):'<span class="dim">Tap pieces below to add them.</span>'}</div><div class="row" style="margin:6px 0"><span class="dim sm">${S.tray.length}/${MAX} pieces</span><span class="sp" style="flex:1"></span><button class="btn" data-a="clr">Clear</button></div>`}
 function findRecipe(tc){return R.find(r=>eqc(r.ing,tc))}
 function unlockProduct(p,byp){const nw=[];[p,...(byp||[])].forEach(x=>{if(!P.unl[x]){P.unl[x]=1;nw.push(x)}});save();return nw}
-function checkQuests(){const done=[];const tl=Object.keys(P.unl).length;QM.forEach((q,i)=>{if(!P.qd['m'+i]&&P.unl[PR[q.r].p]){P.qd['m'+i]=1;const u=q.u.filter(e=>!P.el[e]);u.forEach(e=>P.el[e]=1);done.push({txt:q.txt,u:q.u})}});QS.forEach((q,i)=>{if(P.qd['s'+i])return;const v=q.k=='rec'?tl:q.k=='ok'?P.st.ok:q.k=='dna'?P.st.dna:P.stars;if(v>=q.n){P.qd['s'+i]=1;const u=PT.filter(e=>!P.el[e[1]]&&(q.fam[0]=='*'||q.fam.includes(cat(e)))).map(e=>e[1]);u.forEach(e=>P.el[e]=1);done.push({txt:q.txt,u,lab:q.lab})}});if(done.length)save();return done}
+function checkQuests(){const done=[];const tl=Object.keys(P.unl).length;QM.forEach((q,i)=>{if(!P.qd['n'+i]&&P.unl[PR[q.r].p]){P.qd['n'+i]=1;const u=q.u.filter(e=>!P.el[e]);u.forEach(e=>P.el[e]=1);done.push({txt:q.txt,u:q.u})}});QS.forEach((q,i)=>{if(P.qd['s'+i])return;const v=q.k=='rec'?tl:q.k=='ok'?P.st.ok:q.k=='dna'?P.st.dna:P.stars;if(v>=q.n){P.qd['s'+i]=1;const u=PT.filter(e=>!P.el[e[1]]&&(q.fam[0]=='*'||q.fam.includes(cat(e)))).map(e=>e[1]);u.forEach(e=>P.el[e]=1);done.push({txt:q.txt,u,lab:q.lab})}});if(done.length)save();return done}
 function questHTML(d){return d.map(q=>`<div class="panel glow rwd"><b class="warn">\uD83C\uDFC5 Quest complete! \u2B50 ${q.u.length?'+'+q.u.length+' element'+(q.u.length>1?'s':'')+' unlocked':'secret unlocked'}</b><br> ${esc(q.txt)}<br><span class="sm">Unlocked ${q.lab?esc(q.lab)+' ('+q.u.length+')':q.u.length?'':'a new secret'}</span><div class="chips" style="margin-top:6px">${q.u.slice(0,24).map(e=>`<button class="chip g" data-a="card" data-i="${e}">${e} ${esc(PTS[e][2])}</button>`).join('')}${q.u.length>24?'<span class="chip">+'+(q.u.length-24)+' more</span>':''}</div></div>`).join('')}
 function factHTML(t,s){const a=SRC[s]||SRC.wiki;return`<div class="fact">${esc(t)}<div class="src">Source: <a style="color:var(--c1)" href="${a[1]}" target="_blank" rel="noopener">${a[0]}</a></div></div>`}
 // ---------- lab book
 function missingFor(r){const m=[];Object.keys(r.ing).forEach(k=>{if(!have(k))m.push(k)});return m}
 function book(){let h='<h1>Lab book</h1><p class="dim">To create a compound you need the exact pieces on its card. Brew it once and it joins your pantry as a new ingredient.</p>';CH.forEach((c,ci)=>{const rs=R.filter(r=>r.ch==ci);h+=`<div class="ghead">${c}</div>`;rs.forEach(r=>{const done=P.unl[r.p],m=missingFor(r);h+=`<div class="card ${done?'done':''}"><img src="${flask(r.c)}" width="48" height="52"><div class="info"><b>${esc(r.n)}</b> <span class="dim">${r.f}</span>${r.al?` <span class="chip g">${esc(r.al)}</span>`:''}<p class="sm">To create it you need: ${ingHTML(r.ing)}</p><p class="sm dim">It ${esc(r.use)}.</p>${m.length?`<p class="sm warn">\uD83D\uDD12 Locked: needs ${m.map(x=>esc(nm(x))).join(', ')} first. ${m.some(isEl)?'Complete quests to unlock elements.':''}</p>`:''}</div>${done?'<span class="ok">\u2714</span>':''}${m.length?'':`<button class="btn ${done?'':'pri'}" data-a="brew" data-i="${r.id}">${done?'Again':'Brew'}</button>`}</div>`})});return h}
 // ---------- lab
-function lab(){const t=S.tgt?RID[S.tgt]:null;let h=`<h1>${t?'Brew: '+esc(t.n):'Free lab'}</h1>`;if(t)h+=`<div class="wish">\uD83C\uDFAF <b>Brew goal: ${esc(t.n)}</b> ${t.f}<br>Needs ${ingHTML(t.ing)}</div>`;else h+='<p class="dim sm" style="margin:0 0 6px">Mix anything. Wrong mixes are free.</p>';if(!t)h+=labNudge();if(!t&&Object.keys(P.unl).length>=2)h+='<p style="text-align:center"><button class="btn" data-a="l2go">Level 2: mix two compounds \u27A1</button></p>';
+function lab(){const t=S.tgt?RID[S.tgt]:null;let h=`<h1>${t?'Brew: '+esc(t.n):'Free lab'}</h1>`;if(t)h+=`<div class="wish">\uD83C\uDFAF <b>Brew goal: ${esc(t.n)}</b> ${t.f}<br>Needs ${ingHTML(t.ing)}</div>`;else h+='<p class="dim sm" style="margin:0 0 6px">Mix anything. Wrong mixes are free.</p>';if(!t)h+=labNudge();if(!t&&Object.keys(P.unl).length>=2)h+='<p style="text-align:center">'+l2Btn()+'</p>';
 if(t){const mm=missingFor(t);if(mm.length)h+='<div class="panel" style="text-align:center"><b class="warn">You need '+mm.map(x=>esc(nm(x))).join(', ')+' first.</b><br>Go to free play and discover them.<br><button class="btn pri" data-a="free">Go to Free lab \u27A1</button></div>'}
 h+='<div class="dock">'+trayHTML()+`<button class="btn pri big" data-a="mix" ${S.tray.length?'':'disabled'}>\u2697\uFE0F Mix!</button></div>`;h+=resHTML();return h+pantry()}
 function grpHint(r){const W=['gas item','light metal or mineral','metal','halogen'];const c={};Object.entries(r.ing).forEach(([k,n])=>{let w;if(isEl(k)){const i=GRP.findIndex(g=>g[1].includes(k));w=i>=0?W[i]:'element'}else w='compound you made';c[w]=(c[w]||0)+n});return Object.entries(c).map(([w,n])=>n+' '+w+(n>1&&!/ed$/.test(w)?'s':'')).join(' + ')}
 function labNudge(){const nq=nextQuest();let h='<div class="nudge">';
 if(nq&&!nq.s){const r=RID[nq.q.r];if(r){const u=nq.q.u.filter(e=>!P.el[e]).map(e=>PTS[e][2]);const hl=S.hint&&S.hint.split(':')[0]==nq.q.r?+S.hint.split(':')[1]:0;const KW={acid:'an acid',alloy:'an alloy',base:'a base',gas:'a gas',mineral:'a mineral',oxide:'an oxide',salt:'a salt',liquid:'a liquid',organic:'an organic compound',life:'a life molecule'};
-h+='<div class="nq"><span class="chip">Quest</span> <b>Unlock '+(u.length?esc(u.join(' + ')):'a secret')+'</b><span class="dim"> by making a new compound</span></div>';
+h+='<div class="nq"><span class="chip">Quest</span> <b>Try to unlock '+esc(PR[r.p].n)+'</b><span class="dim"> \u00B7 reward: a new element</span></div>';
 if(hl>=1)h+='<div class="nh">\uD83D\uDCA1 Try mixing '+grpHint(r)+'.'+(hl>=2?' The result is '+(KW[r.k]||'a compound')+'.':'')+'</div>';
 if(hl<2)h+='<button class="btn sm2" data-a="hint" data-i="'+nq.q.r+':'+(hl+1)+'">'+(hl?'More':'\uD83D\uDCA1 Hint')+'</button>'}}
 else if(nq){h+='<div class="nq">\uD83C\uDFAF <b>Goal:</b> '+esc(nq.q.txt)+'</div>'}
@@ -501,13 +502,13 @@ function srcScr(){return`<h1>Sources</h1><p class="dim">Facts were checked again
 // ---------- element table + quests
 function tableScr(){const t=S.tab;let h='<h1>Elements</h1><div class="tabs"><button class="btn '+(t=='table'?'on':'')+'" data-a="tab" data-i="table">Table</button><button class="btn '+(t=='quest'?'on':'')+'" data-a="tab" data-i="quest">Quests</button><button class="btn '+(t=='cmp'?'on':'')+'" data-a="tab" data-i="cmp">Compounds</button></div>';
 if(t=='table'){h+=`<p class="dim sm">${Object.keys(P.el).length}/118 unlocked. Tap any element to read its learning card, locked or not. Unlock elements by completing quests.</p><div style="overflow-x:auto;border:2px solid #2d3b7a;border-radius:10px;padding:6px;background:#0c1230"><div class="pt">${PT.map(e=>{const u=P.el[e[1]],c=CATCOL[cat(e)],mix=ELX[e[1]];return`<button class="el ${u?'':'lk'}" style="grid-column:${e[13]};grid-row:${e[14]};--tc:${c}" data-a="card" data-i="${e[1]}"><b>${e[1]}</b><small>${e[0]}</small>${mix?'<i></i>':''}</button>`}).join('')}</div></div><div class="chips" style="margin-top:8px">${Object.entries(CATCOL).map(([k,c])=>`<span class="chip" style="border-color:${c};color:${c}">${k}</span>`).join('')}</div><p class="sm dim">A dot in the corner means the element is used in the lab recipes. Other elements are collectible with a learning card.</p>`}
-if(t=='quest'){const av=[],hid=[];QM.forEach((q,i)=>{if(P.qd['m'+i])return;(qAvail(q)?av:hid).push([q,i])});
+if(t=='quest'){const av=[],hid=[];QM.forEach((q,i)=>{if(P.qd['n'+i])return;(qAvail(q)?av:hid).push([q,i])});
 h+=`<p class="dim">You start with Hydrogen and Oxygen. Make compounds to discover more elements. New quests appear when you have the elements they need.</p>`;
 h+='<h2>Ready now</h2>';
 if(av.length)h+=av.map(([q,i])=>{const r=RID[q.r];return`<button class="card" style="width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit" data-a="brew" data-i="${q.r}"><div class="info"><b>${esc(q.txt)}</b><p class="sm">${ingHTML(r.ing)}</p><p class="sm dim">Win it to unlock: ${q.u.length?q.u.map(e=>esc(PTS[e][2])).join(', '):'a new secret'}</p><p class="sm"><span class="sticker">Tap to brew</span></p></div></button>`}).join('');
 else h+='<p class="dim sm">Nothing new right now. Try the bonus quests below.</p>';
 if(hid.length)h+=`<p class="dim sm" style="margin-top:8px">${hid.length} more quest${hid.length>1?'s':''} will appear as you discover new elements.</p>`;
-const dn=QM.map((q,i)=>[q,i]).filter(([q,i])=>P.qd['m'+i]);
+const dn=QM.map((q,i)=>[q,i]).filter(([q,i])=>P.qd['n'+i]);
 if(dn.length)h+='<h2>Done</h2>'+dn.map(([q,i])=>`<button class="card done" style="width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit" data-a="card" data-i="c:${PR[RID[q.r].p]?RID[q.r].p:q.r}"><div class="info"><b>\u2714 ${esc(q.txt)}</b><p class="sm dim">Unlocked: ${q.u.length?q.u.map(e=>esc(PTS[e][2])).join(', '):'a new secret'}</p></div></button>`).join('');
 h+='<h2>Bonus quests</h2>';const seen={};
 QS.forEach((q,i)=>{const d=P.qd['s'+i];if(d||seen[q.k])return;seen[q.k]=1;const v=q.k=='rec'?Object.keys(P.unl).length:q.k=='ok'?P.st.ok:q.k=='dna'?P.st.dna:P.stars,to=q.k=='rec'?'lab':q.k=='dna'?'dnamenu':'orders';h+=`<button class="card" style="width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit" data-a="go" data-s="${to}"><div class="info"><b>${esc(q.txt)}</b><p class="sm dim">Win it to unlock ${esc(q.lab)}</p><div class="bar"><i style="width:${Math.min(100,v/q.n*100)}%"></i></div><p class="sm">${Math.min(v,q.n)}/${q.n} \u00B7 tap to play</p></div></button>`});
@@ -865,6 +866,122 @@ const L3D=[
 [['Cu','hno3'],'mix','safe',[],[],'','Metals reacting with nitric acid can give off nitrogen dioxide, a poisonous brown gas. The game keeps them apart.','cdcno2','nitrogen dioxide','Dangerous'],
 [['hno3','hcl','Au'],'mix','safe',[],[],'','Aqua regia dissolves gold but it is a corrosive, oxidising acid mixture with strict lab handling rules. The game keeps it apart.','aquar','corrosive','Dangerous']
 ];
+/* ---- Level 2 and 3 new compounds: products you only get by mixing compounds ---- */
+(function(){
+const sb=t=>t.replace(/([A-Za-z\)\]])(\d+)/g,(m,c,d)=>c+d.replace(/\d/g,x=>'\u2080\u2081\u2082\u2083\u2084\u2085\u2086\u2087\u2088\u2089'[x])).replace(/\.(?=\d)/g,'\u00B7');
+/* id, name, formula, group (0 air/water,1 salts,2 fire&earth,3 metals,4 cabinet,5 life), colour, use */
+const P2=[
+['cano32','Calcium nitrate','Ca(NO3)2',1,'#f7f4ea','is a plant fertiliser salt'],
+['mgno32','Magnesium nitrate','Mg(NO3)2',1,'#f2fbff','is a fertiliser salt for greenhouse plants'],
+['naac','Sodium acetate','CH3COONa',1,'#fffaf0','is the salt in hand warmers and in salt-and-vinegar crisps'],
+['mgac','Magnesium acetate','Mg(CH3COO)2',1,'#f6fbff','is a salt made from vinegar and a magnesium base'],
+['caac','Calcium acetate','Ca(CH3COO)2',1,'#fffdf4','is a food additive made from vinegar and lime'],
+['cahco32','Calcium bicarbonate','Ca(HCO3)2',2,'#e9f6ff','lives only in water and makes hard water'],
+['naclo','Sodium hypochlorite','NaClO',1,'#fff9c2','is the cleaning chemical in household bleach'],
+['naaloh4','Sodium aluminate','Na[Al(OH)4]',1,'#f4f7ff','is how aluminium dissolves in strong base'],
+['alcl3','Aluminium chloride','AlCl3',1,'#fffbe0','is a salt used in industry to speed up reactions'],
+['na2so3','Sodium sulfite','Na2SO3',1,'#f6f8ff','is a food preservative and a photo chemical'],
+['caso3','Calcium sulfite','CaSO3',2,'#f8f4ea','is the solid that scrubbers make from smokestack gas'],
+['naznoh4','Sodium zincate','Na2[Zn(OH)4]',1,'#f4fbf8','is how zinc oxide dissolves in strong base'],
+['nh42so4','Ammonium sulfate','(NH4)2SO4',1,'#fffaf5','is a nitrogen fertiliser'],
+['nh4h2po4','Monoammonium phosphate','NH4H2PO4',1,'#f5fff5','is a fertiliser with nitrogen and phosphorus'],
+['nh4ac','Ammonium acetate','CH3COONH4',1,'#fffcf0','is a salt used as a lab buffer'],
+['agi','Silver iodide','AgI',3,'#f5e66a','is used in film and for cloud seeding'],
+['ag3po4','Silver phosphate','Ag3PO4',3,'#f6dc4a','is a bright yellow solid'],
+['znno32','Zinc nitrate','Zn(NO3)2',3,'#f4f6ff','is a salt used in dyeing'],
+['feno33','Iron(III) nitrate','Fe(NO3)3',3,'#c8a0d4','is a pale purple salt'],
+['ca3po42','Calcium phosphate','Ca3(PO4)2',2,'#f6f0e4','is the mineral that makes up bones and teeth'],
+['feoh3','Iron(III) hydroxide','Fe(OH)3',2,'#c4622c','is a rust-brown solid that forms when iron salts meet a base'],
+['znco3','Zinc carbonate','ZnCO3',3,'#f7f7f4','is a white solid that heat turns into zinc oxide'],
+['h2sio3','Silicic acid','H2SiO3',2,'#f0f7ff','is a gel that dries into silica'],
+['agthio','Silver thiosulfate complex','Na3[Ag(S2O3)2]',3,'#f0f4fa','is how photo fixer dissolves silver chloride'],
+['cunh34so4','Tetraamminecopper sulfate','[Cu(NH3)4]SO4',3,'#1f4fd8','is a deep blue solution'],
+['cunh34oh2','Schweizer\'s reagent','[Cu(NH3)4](OH)2',3,'#1a3fc9','is a deep blue liquid that dissolves cellulose'],
+['caalo','Calcium aluminate','CaAl2O4',2,'#f2efe6','is part of cement'],
+['znoh2','Zinc hydroxide','Zn(OH)2',3,'#f8faf8','dissolves in both acids and strong bases'],
+['feoh2','Iron(II) hydroxide','Fe(OH)2',3,'#b9d6b0','is white to pale green and browns in air'],
+['mg3po42','Magnesium phosphate','Mg3(PO4)2',2,'#f5f8fa','is a white solid'],
+['zn3po42','Zinc phosphate','Zn3(PO4)2',3,'#f4f6f4','is used in rust-proofing coats'],
+['fepo4','Iron(III) phosphate','FePO4',3,'#e6dcc2','is a garden slug killer and a battery ingredient'],
+['cu3po42','Copper(II) phosphate','Cu3(PO4)2',3,'#4fc9b8','is a blue-green solid'],
+['ag2co3','Silver carbonate','Ag2CO3',3,'#f2e07a','is a pale yellow solid that darkens in light'],
+['cuco3','Copper carbonate','CuCO3',3,'#41b894','is the blue-green stuff, like malachite'],
+['ag2o','Silver oxide','Ag2O',3,'#5a4636','is a dark brown powder used in watch batteries'],
+['mcp','Monocalcium phosphate','Ca(H2PO4)2',2,'#f7f4ee','is a fertiliser and a baking powder ingredient'],
+['kh2po4','Monopotassium phosphate','KH2PO4',1,'#f7f4ff','is a fertiliser with phosphorus and potassium'],
+['al2so43','Aluminium sulfate','Al2(SO4)3',1,'#fbfbff','clumps dirt in water so it can be filtered'],
+['alum','Alum','KAl(SO4)2.12H2O',2,'#eaf8ff','grows big clear crystals'],
+['kac','Potassium acetate','CH3COOK',1,'#fffdf4','is a runway de-icer'],
+['znac','Zinc acetate','Zn(CH3COO)2',3,'#f7f9f8','is a source of zinc'],
+['cuac','Copper(II) acetate','Cu(CH3COO)2',3,'#2fae8c','is blue-green, a cousin of verdigris'],
+['cuno32','Copper(II) nitrate','Cu(NO3)2',3,'#2a7ee8','forms bright blue crystals'],
+['alno33','Aluminium nitrate','Al(NO3)3',1,'#f9fbff','is a salt that dissolves easily'],
+['naformate','Sodium formate','HCOONa',1,'#fff3ee','is used as a de-icer and in leather making'],
+['caformate','Calcium formate','Ca(HCOO)2',1,'#fff6ef','is a feed additive and a cement helper'],
+/* made in Level 3 */
+['fecl2','Iron(II) chloride','FeCl2',3,'#c4dca0','is a pale green salt'],
+['ethanol','Ethanol','C2H5OH',5,'#d9f0ff','is the alcohol in drinks, hand gel and fuel'],
+['glucose','Glucose','C6H12O6',5,'#fff2c9','is the sugar that plants make from light, water and CO2'],
+['polyeth','Polyethylene','(C2H4)n',5,'#e8f4ff','is the plastic of bags and bottles'],
+['sodaglass','Soda-lime glass','Na2O.CaO.SiO2',2,'#bfeaff','is ordinary window and bottle glass'],
+['clinker','Cement clinker','Ca3SiO5',2,'#c9c2b0','is ground up to make Portland cement']
+];
+P2.forEach(a=>{PR[a[0]]={id:a[0],n:a[1],f:sb(a[2]),ch:a[3],c:a[4],use:a[5],k:'salt',ing:{},fact:'',s:'wiki',lv:2}});
+const key=(a,b)=>[a,b].sort().join('+');
+/* attach products to existing Level 2 cards that had none */
+const SET2={'caoh2+hno3':['cano32','water'],'hno3+mgoh2':['mgno32','water'],'caco3+hno3':['cano32','co2','water'],'acetic+naoh':['naac','water'],'acetic+mgoh2':['mgac','water'],'acetic+caco3':['caac','co2','water'],'acetic+nahco3':['naac','co2','water'],'acetic+washsoda':['naac','co2','water'],'caco3+h2co3':['cahco32'],'hclo+naoh':['naclo','water'],'aloh3+naoh':['naaloh4'],'aloh3+hcl':['alcl3','water'],'naoh+so2':['na2so3','water'],'caoh2+so2':['caso3','water'],'naoh+zno':['naznoh4'],'al2o3+naoh':['naaloh4'],'h2so4+nh3':['nh42so4'],'h3po4+nh3':['nh4h2po4'],'acetic+nh3':['nh4ac'],'agno3+cacl2':['agcl','cano32'],'agno3+mgcl2':['agcl','mgno32'],'agno3+zncl2':['agcl','znno32'],'agno3+fecl3':['agcl','feno33'],'agno3+ki':['agi','kno3'],'agno3+na3po4':['ag3po4','nano3'],'cacl2+na3po4':['ca3po42','nacl'],'fecl3+naoh':['feoh3','nacl'],'fecl3+washsoda':['feoh3','co2','nacl'],'caoh2+fecl3':['feoh3','cacl2'],'washsoda+znso4':['znco3','na2so4'],'washsoda+zncl2':['znco3','nacl'],'hcl+na2sio3':['h2sio3','nacl'],'agcl+na2s2o3':['agthio','nacl'],'cuso4+nh3':['cunh34so4'],'cuoh2+nh3':['cunh34oh2'],'cao+so2':['caso3'],'al2o3+cao':['caalo']};
+const seen={};
+L2D.forEach(r=>{const k=key(r[0],r[1]);const s=SET2[k];if(s&&!r[4].length){r[4]=s;seen[k]=1}});
+Object.keys(SET2).forEach(k=>{if(!seen[k])console.warn('L2 patch missed',k)});
+/* new Level 2 cards */
+const N=(a,b,fam,prods,eq,fact,src,kw)=>{if(L2D.some(r=>key(r[0],r[1])==key(a,b)))console.warn('L2 dup',a,b);L2D.push([a,b,fam,'new',prods,eq,fact,src,kw])};
+N('zncl2','naoh','D',['znoh2','nacl'],'ZnCl2 + 2 NaOH -> Zn(OH)2 + 2 NaCl','Zinc hydroxide is a white solid that dissolves in both acids and strong bases, which is called amphoteric.','W:Zinc_hydroxide','amphoteric');
+N('feso4','naoh','D',['feoh2','na2so4'],'FeSO4 + 2 NaOH -> Fe(OH)2 + Na2SO4','Iron(II) hydroxide starts out white to pale green and turns brown in air as the iron picks up oxygen.','W:Iron(II)_hydroxide','oxid');
+N('mgcl2','na3po4','D',['mg3po42','nacl'],'3 MgCl2 + 2 Na3PO4 -> Mg3(PO4)2 + 6 NaCl','Magnesium phosphate is a family of salts. Trimagnesium phosphate, Mg3(PO4)2, is the one this mix makes.','W:Magnesium_phosphate','trimagnesium');
+N('znso4','na3po4','D',['zn3po42','na2so4'],'3 ZnSO4 + 2 Na3PO4 -> Zn3(PO4)2 + 3 Na2SO4','Zinc phosphate is a white solid used in coatings that protect steel from rust.','W:Zinc_phosphate','corrosion');
+N('fecl3','na3po4','D',['fepo4','nacl'],'FeCl3 + Na3PO4 -> FePO4 + 3 NaCl','Iron(III) phosphate is used as a garden slug and snail killer and as a starting material for lithium iron phosphate batteries.','W:Iron(III)_phosphate','molluscicide');
+N('cuso4','na3po4','D',['cu3po42','na2so4'],'3 CuSO4 + 2 Na3PO4 -> Cu3(PO4)2 + 3 Na2SO4','Copper(II) phosphate is a blue-green solid that barely dissolves in water.','W:Copper(II)_phosphate','phosphate');
+N('agno3','washsoda','D',['ag2co3','nano3'],'2 AgNO3 + Na2CO3 -> Ag2CO3 + 2 NaNO3','Silver carbonate forms as a pale yellow solid that slowly darkens in light.','W:Silver_carbonate','yellow');
+N('cuso4','washsoda','D',['cuco3','na2so4'],'CuSO4 + Na2CO3 -> CuCO3 + Na2SO4','Mixing copper sulfate and washing soda gives a blue-green solid. The real mineral form is malachite, a basic copper carbonate.','W:Copper(II)_carbonate','malachite');
+N('agno3','naoh','D',['ag2o','nano3'],'2 AgNO3 + 2 NaOH -> Ag2O + 2 NaNO3 + H2O','Silver oxide forms as a dark brown solid when a silver salt meets a base.','W:Silver_oxide','brown');
+N('caoh2','h3po4','C',['mcp','water'],'Ca(OH)2 + 2 H3PO4 -> Ca(H2PO4)2 + 2 H2O','Monocalcium phosphate is a main part of superphosphate fertiliser and is also used in baking powder.','W:Monocalcium_phosphate','baking powder');
+N('koh','h3po4','C',['kh2po4','water'],'KOH + H3PO4 -> KH2PO4 + H2O','Monopotassium phosphate is used as a fertiliser and a food additive.','W:Monopotassium_phosphate','fertili');
+N('aloh3','h2so4','C',['al2so43','water'],'2 Al(OH)3 + 3 H2SO4 -> Al2(SO4)3 + 6 H2O','Aluminium sulfate is added to drinking water to clump dirt together so it can be filtered out.','W:Aluminium_sulfate','flocculation');
+N('al2so43','k2so4','C',['alum'],'Al2(SO4)3 + K2SO4 + 24 H2O -> 2 KAl(SO4)2.12H2O','Alum is a double salt that grows large clear crystals. It was used for centuries as a mordant to fix dyes in cloth.','W:Alum','mordant');
+N('caoh2','acetic','C',['caac','water'],'Ca(OH)2 + 2 CH3COOH -> Ca(CH3COO)2 + 2 H2O','Calcium acetate is used as a food additive and as a calcium source in medicine.','W:Calcium_acetate','calcium acetate');
+N('koh','acetic','C',['kac','water'],'KOH + CH3COOH -> CH3COOK + H2O','Potassium acetate is used as a de-icer on runways and roads.','W:Potassium_acetate','deicing');
+N('zno','acetic','C',['znac','water'],'ZnO + 2 CH3COOH -> Zn(CH3COO)2 + H2O','Zinc acetate is used as a zinc source and in some cold lozenges.','W:Zinc_acetate','zinc acetate');
+N('cuoh2','acetic','C',['cuac','water'],'Cu(OH)2 + 2 CH3COOH -> Cu(CH3COO)2 + 2 H2O','Copper(II) acetate is blue-green. A related basic copper acetate is the old pigment verdigris.','W:Copper(II)_acetate','verdigris');
+N('cuoh2','hno3','C',['cuno32','water'],'Cu(OH)2 + 2 HNO3 -> Cu(NO3)2 + 2 H2O','Copper(II) nitrate forms bright blue crystals that pull water from the air.','W:Copper(II)_nitrate','hygroscopic');
+N('zno','hno3','C',['znno32','water'],'ZnO + 2 HNO3 -> Zn(NO3)2 + H2O','Zinc nitrate is a colourless salt used as a mordant in dyeing.','W:Zinc_nitrate','mordant');
+N('aloh3','hno3','C',['alno33','water'],'Al(OH)3 + 3 HNO3 -> Al(NO3)3 + 3 H2O','Aluminium nitrate dissolves easily in water and is used in leather tanning and as a corrosion inhibitor.','W:Aluminium_nitrate','tanning');
+N('formic','naoh','C',['naformate','water'],'HCOOH + NaOH -> HCOONa + H2O','Sodium formate is used as a de-icer and in leather making.','W:Sodium_formate','de-ic');
+N('caoh2','formic','C',['caformate','water'],'Ca(OH)2 + 2 HCOOH -> Ca(HCOO)2 + 2 H2O','Calcium formate is used as a feed additive and as a setting aid in concrete.','W:Calcium_formate','concrete');
+/* Level 3 */
+const key3=(i,c)=>i.slice().sort().join('+')+'@'+c;
+const SET3={'Cu+agno3@mix':['cuno32'],'Zn+agno3@mix':['znno32'],'Fe+hcl@mix':['fecl2','h2'],'c2h4+water@cat':['ethanol'],'c2h4@cat':['polyeth'],'al2o3+cao+sio2@heat':['clinker'],'caco3+sio2+washsoda@heat':['sodaglass','co2'],'co2+water@light':['glucose','o2'],'nh4cl@heat':['nh3','hcl']};
+const s3={};
+L3D.forEach(r=>{const k=key3(r[0],r[1]);const s=SET3[k];if(s){r[3]=s;s3[k]=1}});
+Object.keys(SET3).forEach(k=>{if(!s3[k])console.warn('L3 patch missed',k)});
+const M=(items,cond,prods,els,eq,fact,src,kw)=>{if(L3D.some(r=>key3(r[0],r[1])==key3(items,cond)))console.warn('L3 dup',items);L3D.push([items,cond,'new',prods,els,eq,fact,src,kw,'New compounds at work'])};
+M(['ca3po42','h2so4'],'mix',['mcp','gypsum'],[],'Ca3(PO4)2 + 2 H2SO4 -> Ca(H2PO4)2 + 2 CaSO4','Ordinary superphosphate fertiliser is made by treating phosphate rock with sulfuric acid. It gives a mix of monocalcium phosphate and gypsum.','W:Superphosphate','sulfuric acid');
+M(['ca3po42','h3po4'],'mix',['mcp'],[],'Ca3(PO4)2 + 4 H3PO4 -> 3 Ca(H2PO4)2','Triple superphosphate is made by treating phosphate rock with phosphoric acid.','W:Superphosphate','triple');
+M(['feoh3'],'heat',['rust','water'],[],'2 Fe(OH)3 -> Fe2O3 + 3 H2O','Heating iron(III) hydroxide drives off water and leaves iron(III) oxide, the same stuff as rust.','W:Iron(III)_hydroxide','oxide');
+M(['znoh2'],'heat',['zno','water'],[],'Zn(OH)2 -> ZnO + H2O','Heating zinc hydroxide drives off water and leaves zinc oxide.','W:Zinc_hydroxide','zinc oxide');
+M(['znco3'],'heat',['zno','co2'],[],'ZnCO3 -> ZnO + CO2','Heating zinc carbonate gives off carbon dioxide and leaves zinc oxide.','W:Zinc_carbonate','zinc oxide');
+M(['cuco3'],'heat',['cuo','co2'],[],'CuCO3 -> CuO + CO2','Heating copper carbonate gives off carbon dioxide and leaves black copper(II) oxide.','W:Copper(II)_carbonate','oxide');
+M(['ag2co3'],'heat',['ag2o','co2'],[],'Ag2CO3 -> Ag2O + CO2','Heating silver carbonate gives off carbon dioxide and leaves silver oxide.','W:Silver_carbonate','silver oxide');
+M(['cahco32'],'heat',['caco3','water','co2'],[],'Ca(HCO3)2 -> CaCO3 + H2O + CO2','Water carrying calcium bicarbonate drips into caves and loses carbon dioxide. The calcium carbonate that is left behind slowly builds stalactites.','W:Calcium_bicarbonate','stalact');
+M(['h2sio3'],'heat',['sio2','water'],[],'H2SiO3 -> SiO2 + H2O','Silicic acid loses water on drying and becomes silica gel, the little packets that keep goods dry.','W:Silicic_acid','silica');
+M(['caso3','o2'],'mix',['gypsum'],[],'2 CaSO3 + O2 -> 2 CaSO4','Power plants scrub sulfur dioxide out of smoke with lime. The calcium sulfite is then oxidised to gypsum, which is sold for wallboard.','W:Flue-gas_desulfurization','gypsum');
+M(['al2so43','nahco3'],'mix',['aloh3','na2so4','co2'],[],'Al2(SO4)3 + 6 NaHCO3 -> 2 Al(OH)3 + 3 Na2SO4 + 6 CO2','Aluminium sulfate added to water forms fluffy aluminium hydroxide flakes that trap dirt, so it can settle out.','W:Aluminium_sulfate','flocculation');
+M(['nh42so4','caoh2'],'heat',['nh3','gypsum','water'],[],'(NH4)2SO4 + Ca(OH)2 -> 2 NH3 + CaSO4 + 2 H2O','Warming an ammonium salt with slaked lime frees ammonia gas. It is a classic school way to make ammonia.','W:Ammonia','calcium hydroxide');
+M(['naac','naoh'],'heat',['ch4','washsoda'],[],'CH3COONa + NaOH -> CH4 + Na2CO3','Heating sodium acetate with a strong base and a little lime makes methane, the gas in natural gas.','W:Sodium_acetate','methane');
+M(['feoh2','o2','water'],'mix',['feoh3'],[],'4 Fe(OH)2 + O2 + 2 H2O -> 4 Fe(OH)3','Pale iron(II) hydroxide turns brown in air as it oxidises to iron(III) hydroxide, which is how rust gets started.','W:Iron(II)_hydroxide','oxid');
+M(['Zn','cuno32'],'mix',['znno32'],['Cu'],'Zn + Cu(NO3)2 -> Zn(NO3)2 + Cu','Zinc is more reactive than copper, so it pushes copper out of the blue solution and the copper plates out as a metal.','W:Single_displacement_reaction','reactiv');
+M(['Mg','znno32'],'mix',['mgno32'],['Zn'],'Mg + Zn(NO3)2 -> Mg(NO3)2 + Zn','Magnesium is more reactive than zinc, so it pushes zinc out of the solution.','W:Single_displacement_reaction','reactiv');
+M(['Fe','cuno32'],'mix',[],['Cu'],'Fe + Cu(NO3)2 -> Fe(NO3)2 + Cu','An iron nail dipped in a blue copper salt solution gets coated with copper. Iron is more reactive than copper.','W:Single_displacement_reaction','reactiv');
+})();
 /* ---- Level 2: mix two compounds ---- */
 const L2S={
  libre:['LibreTexts Chemistry','https://chem.libretexts.org/Courses/Oregon_Institute_of_Technology/OIT%3A_CHE_101_-_Introduction_to_General_Chemistry/07%3A_Acid-Base_Equilibria/7.04%3A_Acid-Base_Neutralization'],
@@ -911,6 +1028,14 @@ const L2=L2D.map(r=>{const e=r.slice();e[5]=subd(e[5]);return e});
 const l2key=(a,b)=>[a,b].sort().join('+');
 const L2M={};L2.forEach(r=>L2M[l2key(r[0],r[1])]=r);
 function l2Count(){return L2.filter(r=>r[2]!='F'&&(P.l2||{})[l2key(r[0],r[1])]).length}
+const L2PCT=.8,L3PCT=.8;
+function l2Need(){return Math.ceil(R.length*L2PCT)}
+function elDone(){return Object.keys(P.el).length}
+function l1Done(){return R.filter(r=>P.unl[r.p]).length}
+function l2Open(){return Object.keys(P.l2||{}).length>0||l1Done()>=l2Need()}
+function l3Open(){return Object.keys(P.l3||{}).length>0||l2Count()>=Math.ceil(l2Tot()*L3PCT)}
+function l2Btn(){return l2Open()?'<button class="btn" data-a="l2go">Level 2: mix two compounds \u27A1</button>':'<button class="btn" disabled style="opacity:.75">\uD83D\uDD12 Level 2: '+l1Done()+'/'+l2Need()+' compounds to unlock</button><div class="dim sm" style="margin-top:4px">Discover 80% of the Level 1 compounds first.</div>'}
+function l3Btn(){return l3Open()?'<button class="btn" data-a="l3go">Level 3: Factory \u27A1</button>':'<button class="btn" disabled style="opacity:.75">\uD83D\uDD12 Level 3: '+l2Count()+'/'+Math.ceil(l2Tot()*L3PCT)+' Level 2 mixes to unlock</button><div class="dim sm" style="margin-top:4px">Find 80% of the Level 2 mixes first.</div>'}
 function l2Tot(){return L2.filter(r=>r[2]!='F').length}
 function l2Tile(id,sel){const r=PR[id];return`<button class="tile ${sel?'sel':''}" style="--tc:${r.c}" data-a="l2add" data-i="${id}"><img src="${flask(r.c)}" width="36" height="39"><span class="fm">${r.f.length>9?'':r.f}</span><span class="nm">${esc(r.n)}</span></button>`}
 function l2Slot(id,lab){return id?`<button class="tile" style="--tc:${PR[id].c};min-width:96px" data-a="l2rm" data-i="${id}"><img src="${flask(PR[id].c)}" width="36" height="39"><span class="nm">${esc(PR[id].n)}</span></button>`:`<div class="tile" style="--tc:#b9c3ee;min-width:96px;opacity:.7"><span class="nm">${lab}</span></div>`}
@@ -922,7 +1047,7 @@ return`<div class="panel glow" style="text-align:center"><h2 style="margin-top:0
 function l2Hint(){const s=S.l2;const has=id=>P.unl[id];const ids=[s.a,s.b];let n=0;ids.forEach(id=>L2.forEach(r=>{if(r[2]!='F'&&(r[0]==id||r[1]==id)){const o=r[0]==id?r[1]:r[0];if(has(o)&&!(P.l2||{})[l2key(r[0],r[1])])n++}}));
 return n?'One of these compounds still has a real partner among your compounds. Swap the other one.':'These two have no new reaction with what you have. Make more compounds and come back.'}
 function l2Scr(){if(!S.l2)S.l2={a:null,b:null,res:null};const s=S.l2;const u=Object.keys(PR).filter(p=>P.unl[p]);
-let h=`<h1>Level 2: Mix compounds</h1><p class="dim">Pick two compounds you have made and mix them. Only real chemistry works. ${l2Count()} of ${l2Tot()} found.</p><p><button class="btn" data-a="l3go">Level 3: Factory \u27A1</button></p>`;
+let h=`<h1>Level 2: Mix compounds</h1><p class="dim">Pick two compounds you have made and mix them. Only real chemistry works. ${l2Count()} of ${l2Tot()} found.</p><p>${l3Btn()}</p>`;
 h+=`<div class="panel" style="display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap">${l2Slot(s.a,'Pick one')}<b style="font-size:24px">+</b>${l2Slot(s.b,'Pick two')}</div><p style="text-align:center"><button class="btn pri big" data-a="l2mix" ${s.a&&s.b?'':'disabled'}>\u2697\uFE0F Mix!</button></p>`;
 h+=l2Res();
 if(!u.length)h+='<div class="panel">Make some compounds in the Free lab first, then come back.</div>';
@@ -931,7 +1056,7 @@ const dz=L2.filter(r=>r[2]=='F'&&(P.l2d||{})[l2key(r[0],r[1])]);
 if(dz.length)h+=`<div class="ghead">\u26A0\uFE0F Dangerous notebook</div><div class="panel" style="border-color:var(--bad)"><p class="sm dim" style="margin-top:0">Pairs to keep apart. Safety awareness only, not instructions.</p>${dz.map(r=>`<p class="sm"><b>${esc(PR[r[0]].n)} + ${esc(PR[r[1]].n)}</b>: ${esc(r[6])}</p>`).join('')}</div>`;
 return h}
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a^="l2"]');if(!el)return;const a=el.dataset.a,i=el.dataset.i;if(S.scr!='l2'&&a!='l2go')return;e.stopPropagation();
-if(a=='l2go'){S.l2={a:null,b:null,res:null};go('l2');return}
+if(a=='l2go'){if(!l2Open())return;S.l2={a:null,b:null,res:null};go('l2');return}
 const s=S.l2;
 if(a=='l2add'){if(s.a==i||s.b==i){}else if(!s.a)s.a=i;else if(!s.b)s.b=i;else s.b=i;s.res=null;s.th=0;sfx.pop()}
 else if(a=='l2rm'){if(s.a==i)s.a=null;if(s.b==i)s.b=null;s.res=null;s.th=0}
@@ -969,7 +1094,7 @@ const dz=L3.filter(r=>r[2]=='safe'&&(P.l3d||{})[l3key(r[0],r[1])]);
 if(dz.length)h+=`<div class="ghead">\u26A0\uFE0F Dangerous notebook</div><div class="panel" style="border-color:var(--bad)"><p class="sm dim" style="margin-top:0">Pairs to keep apart. Safety awareness only, not instructions.</p>${dz.map(r=>`<p class="sm"><b>${r[0].map(l3Nm).join(' + ')}</b>: ${esc(r[6])}</p>`).join('')}</div>`;
 return h}
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a^="l3"]');if(!el)return;const a=el.dataset.a,i=el.dataset.i;if(S.scr!='l3'&&a!='l3go')return;e.stopPropagation();
-if(a=='l3go'){S.l3={items:[],cond:'mix',res:null};go('l3');return}
+if(a=='l3go'){if(!l3Open())return;S.l3={items:[],cond:'mix',res:null};go('l3');return}
 const s=S.l3;
 if(a=='l3add'){if(s.items.indexOf(i)<0){if(s.items.length<3)s.items.push(i);else{s.items.shift();s.items.push(i)}}s.res=null;s.th=0;sfx.pop()}
 else if(a=='l3rm'){s.items=s.items.filter(x=>x!=i);s.res=null;s.th=0}
