@@ -606,7 +606,7 @@ function resOrder(){const o=S.ord,r=o.res,t=o.cur.r;return`<div class="panel ${r
 // ---------- scores
 function lbAdd(k,s,u){P.lb[k]=(P.lb[k]||[]).concat([{n:P.name||'Alchemist',s,d:new Date().toISOString().slice(0,10),u:u||'%'}]).sort((a,b)=>b.s-a.s).slice(0,10);save()}
 const DN=['Pair up','Spot the typo','What does it do?','Lost a letter','CRISPR repair'];
-function lbScr(){const keys=[['orders','Potion orders (shift average)'],...DN.map((n,i)=>['dna'+(i+1),'DNA: '+n]),...[['mc','Pick from 6'],['ty','Type it']].reduce((a,m)=>a.concat(CLUE_LV.map(l=>['clue_'+m[0]+l[0],'Clue ladder, '+m[1]+', '+l[1]+' (points)'])),[])];return'<h1>Scores</h1><p class="dim">Saved on this device only.</p>'+keys.map(([k,l])=>`<h2>${l}</h2>${(P.lb[k]||[]).length?`<table class="lb">${P.lb[k].map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.n)}</td><td>${r.s}${r.u==='pts'?' pts':'%'}</td><td class="dim">${r.d}</td></tr>`).join('')}</table>`:'<p class="dim sm">No scores yet.</p>'}`).join('')+`<p class="sm dim">Stars: ${P.stars}. 100 stars make a golden flask.</p>`}
+function lbScr(){const keys=[['orders','Potion orders (shift average)'],['catch','Element Catch (points)'],['formula','Formula Builder (points)'],...DN.map((n,i)=>['dna'+(i+1),'DNA: '+n]),...[['mc','Pick from 6'],['ty','Type it']].reduce((a,m)=>a.concat(CLUE_LV.map(l=>['clue_'+m[0]+l[0],'Clue ladder, '+m[1]+', '+l[1]+' (points)'])),[])];return'<h1>Scores</h1><p class="dim">Saved on this device only.</p>'+keys.map(([k,l])=>`<h2>${l}</h2>${(P.lb[k]||[]).length?`<table class="lb">${P.lb[k].map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.n)}</td><td>${r.s}${r.u==='pts'?' pts':'%'}</td><td class="dim">${r.d}</td></tr>`).join('')}</table>`:'<p class="dim sm">No scores yet.</p>'}`).join('')+`<p class="sm dim">Stars: ${P.stars}. 100 stars make a golden flask.</p>`}
 function srcScr(){return`<h1>Sources</h1><p class="dim">Facts were checked against these references; each fact card links the one it relies on. Element data (names, masses, phases, melting and boiling points, discoverers) and the element texts come from Wikipedia, via the open Periodic-Table-JSON dataset (CC BY-SA 3.0). Game reactions and ratios are simplified for play. Never try chemistry at home.</p><div class="panel">${Object.values(SRC).map(s=>`<p><a style="color:var(--c1)" href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a><br><span class="sm dim">${s[1]}</span></p>`).join('')}<p><a style="color:var(--c1)" href="https://github.com/Bowserinator/Periodic-Table-JSON" target="_blank" rel="noopener">Periodic-Table-JSON</a></p></div>`}
 // ---------- element table + quests
 function tableScr(){const t=S.tab;let h='<h1>Elements</h1><div class="tabs"><button class="btn '+(t=='table'?'on':'')+'" data-a="tab" data-i="table">Table</button><button class="btn '+(t=='quest'?'on':'')+'" data-a="tab" data-i="quest">Quests</button><button class="btn '+(t=='cmp'?'on':'')+'" data-a="tab" data-i="cmp">Compounds</button></div>';
@@ -1829,7 +1829,7 @@ function elementCatch(){
   function gameOver(){
     over=true;cancelAnimationFrame(raf);
     tiles.slice().forEach(remove);
-    saveBest('nl.elcatch.best.v1',score);
+    saveBest('nl.elcatch.best.v1',score);if(score>0)lbAdd('catch',score,'pts');
     var c=el('div','nlo-center');
     c.appendChild(el('h2',null,'Round over'));
     c.appendChild(el('p',null,'You caught elements for <span class="nlo-score">'+score+'</span> points. Best on this device: '+best('nl.elcatch.best.v1')+'.'));
@@ -2015,7 +2015,7 @@ function formulaBuilder(){
   actions.appendChild(undo);actions.appendChild(clear);actions.appendChild(build);
   var finish=el('button','nlo-back','Finish');finish.type='button';
   finish.addEventListener('click',function(){
-    saveBest('nl.formula.best.v1',score);
+    saveBest('nl.formula.best.v1',score);if(score>0)lbAdd('formula',score,'pts');
     var c=el('div','nlo-center');
     c.appendChild(el('h2',null,'Bench closed'));
     c.appendChild(el('p',null,'You built '+made+' compound'+(made===1?'':'s')+' for <span class="nlo-score">'+score+'</span> points. Best on this device: '+best('nl.formula.best.v1')+'.'));
@@ -2040,4 +2040,3 @@ document.addEventListener('click',function(ev){
 
 </script>
 </body></html>
-
