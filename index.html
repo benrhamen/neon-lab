@@ -223,6 +223,67 @@ if(document.body)mk();else document.addEventListener("DOMContentLoaded",mk)})();
 .bbonus b{font-size:14px;color:var(--ink,#3b3a6b)}
 .bbonus span{font-size:11px;color:#7a78a0;font-weight:400;line-height:1.3}
 
+
+/* ---- Potion Pour ---- */
+.pp-stars svg{width:var(--ss,12px);height:var(--ss,12px);vertical-align:-1px}
+.pp-hudstars{display:flex;align-items:center;gap:3px}
+.pp-hudstars .pp-total{font-size:13px;color:#e8b400;display:flex;align-items:center;gap:3px}
+.pp-hudinfo{font-size:12px;color:var(--dim,#8d9ac8);font-weight:700}
+.pp-gridhead{padding:14px 6px 6px;text-align:center;position:sticky;top:0;background:var(--bg,#0a0e1f);z-index:2}
+.pp-title{font-weight:800;font-size:16px;letter-spacing:.06em;color:#0ba8b3;text-shadow:0 0 10px rgba(25,242,255,.35)}
+.pp-sub{font-size:11px;color:var(--dim,#8d9ac8);margin-top:2px}
+.pp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:8px;padding:10px 12px 24px;overflow-y:auto}
+.pp-cell{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:54px;border-radius:12px;border:2px solid #1b2650;background:#131b3a;color:#e8f0ff;font-family:inherit;font-size:15px;cursor:pointer;box-shadow:0 3px 0 #1b2650}
+.pp-cell b{font-size:15px}
+.pp-cell:active{transform:translateY(2px);box-shadow:none}
+.pp-cell.cleared{border-color:rgba(46,213,115,.55);box-shadow:0 3px 0 #173a2c,0 0 10px rgba(46,213,115,.25)}
+.pp-cell.locked{opacity:.55;cursor:default;color:#8d9ac8;font-size:11px}
+.pp-cell.locked span{font-size:11px}
+.pp-playtop{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.pp-lv{flex:1;text-align:center;font-weight:800;font-size:14px}
+.pp-mv{font-weight:800;font-size:16px;color:var(--ink,#3b3a6b);text-align:center;min-width:44px}
+.pp-par{display:block;font-size:10px;color:var(--dim,#8d9ac8);font-weight:600}
+.pp-board{position:relative;flex:1;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:18px 14px;margin:6px auto;padding:30px 10px 44px;min-height:0;overflow-y:auto;width:calc(100% - 24px);max-width:720px;border-radius:18px;border:2px solid #2b3a7d;background:
+  radial-gradient(circle at 18% 12%,rgba(25,242,255,.14) 0,transparent 26%),
+  radial-gradient(circle at 84% 8%,rgba(182,255,59,.10) 0,transparent 22%),
+  radial-gradient(circle at 50% 0%,#263475 0%,#151d47 55%,#101637 100%);
+  box-shadow:inset 0 2px 18px rgba(25,242,255,.14),inset 0 -14px 30px rgba(0,0,12,.5),0 4px 0 #1b2650}
+.pp-board::before{content:'';position:absolute;left:0;right:0;bottom:0;height:26px;border-radius:0 0 16px 16px;background:linear-gradient(180deg,#7a5a34 0%,#5d4226 55%,#463018 100%);box-shadow:inset 0 3px 0 rgba(255,220,150,.35),inset 0 -4px 8px rgba(0,0,0,.4);pointer-events:none}
+.pp-board::after{content:'';position:absolute;top:10px;left:14px;right:14px;height:1px;background:linear-gradient(90deg,transparent,rgba(140,200,255,.35),transparent);pointer-events:none}
+.pp-tube{position:relative;width:50px;height:168px;padding:0;border:none;background:none;cursor:pointer;transition:transform .42s cubic-bezier(.34,1.4,.44,1);transform-origin:50% 88%}
+.pp-glass{position:absolute;inset:0;border:2px solid rgba(205,235,255,.78);border-top-width:3px;border-radius:10px 10px 22px 22px;background:linear-gradient(105deg,rgba(255,255,255,.17) 0%,rgba(255,255,255,.04) 24%,rgba(255,255,255,0) 46%,rgba(255,255,255,.05) 78%,rgba(255,255,255,.11) 100%);box-shadow:inset 0 6px 10px rgba(255,255,255,.10),inset 0 -12px 20px rgba(4,10,40,.38),inset 4px 0 8px rgba(255,255,255,.05),inset -4px 0 8px rgba(4,10,40,.18),0 10px 16px rgba(2,6,26,.45);overflow:hidden}
+.pp-glass::before{content:'';position:absolute;top:4px;bottom:8px;left:10%;width:15%;border-radius:99px;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.14) 55%,rgba(255,255,255,.05));z-index:2;pointer-events:none}
+.pp-glass::after{content:'';position:absolute;top:1px;left:7%;right:7%;height:8px;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,rgba(255,255,255,.70),rgba(255,255,255,0) 72%);z-index:2;pointer-events:none}
+.pp-tube.pp-sel .pp-glass{border-color:#19f2ff;box-shadow:0 0 14px rgba(25,242,255,.55),inset 0 6px 10px rgba(255,255,255,.10),inset 0 -12px 20px rgba(4,10,40,.38),inset 4px 0 8px rgba(255,255,255,.05),inset -4px 0 8px rgba(4,10,40,.18),0 10px 16px rgba(2,6,26,.45)}
+.pp-tube.pp-sel{transform:translateY(-12px)}
+.pp-tube.pp-done .pp-glass{border-color:rgba(46,213,115,.6);box-shadow:0 0 12px rgba(46,213,115,.35),inset 0 6px 10px rgba(255,255,255,.10),inset 0 -12px 20px rgba(4,10,40,.38),inset 4px 0 8px rgba(255,255,255,.05),inset -4px 0 8px rgba(4,10,40,.18),0 10px 16px rgba(2,6,26,.45)}
+.pp-tube.pp-pouring{z-index:5}
+.pp-layer{position:absolute;left:3px;right:3px;transition:height .4s ease,bottom .4s ease}
+.pp-layer:first-child{border-radius:0 0 18px 18px}
+.pp-layer.pp-surface{border-radius:6px 6px 0 0}
+.pp-layer.pp-surface::after{content:'';position:absolute;top:-1px;left:-3px;right:-3px;height:7px;border-radius:50%;background:radial-gradient(ellipse at 50% 35%,rgba(255,255,255,.60),rgba(255,255,255,.15) 60%,rgba(255,255,255,0) 78%)}
+.pp-stream{position:fixed;width:6px;border-radius:3px;z-index:90;pointer-events:none;box-shadow:0 0 8px rgba(255,255,255,.35);animation:pp-pour .42s ease-in forwards}
+@keyframes pp-pour{0%{opacity:0;transform:scaleY(.1);transform-origin:top}25%{opacity:1;transform:scaleY(1)}80%{opacity:1}100%{opacity:0}}
+.pp-tube.pp-shake{animation:pp-shake .3s ease}
+@keyframes pp-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.pp-tube.pp-filled .pp-glass{animation:pp-fill .4s ease}
+@keyframes pp-fill{0%{box-shadow:0 0 0 rgba(25,242,255,0)}40%{box-shadow:0 0 18px rgba(25,242,255,.7)}100%{box-shadow:0 0 6px rgba(25,242,255,.2)}}
+.pp-hint{text-align:center;font-size:12px;color:var(--dim,#8d9ac8);padding:2px 14px 6px;min-height:20px}
+.pp-acts{display:flex;gap:10px;justify-content:center;padding:6px 12px 16px}
+.pp-acts .nlo-btn:disabled{opacity:.45}
+.pp-win{text-align:center;background:var(--pan,#fcfcff);border:3px solid var(--ink,#3b3a6b);border-radius:18px;padding:20px 18px;width:min(400px,calc(100% - 40px));margin:0;box-shadow:0 8px 0 rgba(59,58,107,.3);z-index:6;position:relative}
+.pp-win .pp-bigstars svg{animation:pp-starpop .5s cubic-bezier(.34,1.6,.44,1) both}
+.pp-win .pp-bigstars svg:nth-child(2){animation-delay:.15s}
+.pp-win .pp-bigstars svg:nth-child(3){animation-delay:.3s}
+@keyframes pp-starpop{0%{transform:scale(0) rotate(-40deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+.pp-bigstars svg{width:30px;height:30px;margin:0 3px;filter:drop-shadow(0 0 6px rgba(255,211,42,.6))}
+.pp-win h2{color:#0ba8b3;margin-top:0;text-shadow:0 0 10px rgba(25,242,255,.35)}
+.pp-win .nlo-btn{margin:4px}
+@media (max-width:380px){.pp-tube{width:44px;height:148px}.pp-board{gap:12px 8px;padding:20px 6px}}
+.pp-resume{max-width:340px;margin:26px auto 0;background:var(--pan,#131b3a);border:2px solid #2d3b7a;border-radius:12px;padding:16px;text-align:center}
+.pp-resumeacts{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.pp-resumechip{margin-top:8px;border:2px solid #19f2ff;background:rgba(25,242,255,.10);color:#19f2ff;border-radius:99px;padding:7px 14px;font-weight:700;box-shadow:0 0 10px rgba(25,242,255,.25)}
+
 </style>
 <body><div id="app"></div><button class="up" id="up" aria-label="Back to top" onclick="scrollTo({top:0,behavior:'smooth'})">⬆</button>
 <script>
@@ -606,7 +667,7 @@ function resOrder(){const o=S.ord,r=o.res,t=o.cur.r;return`<div class="panel ${r
 // ---------- scores
 function lbAdd(k,s,u){P.lb[k]=(P.lb[k]||[]).concat([{n:P.name||'Alchemist',s,d:new Date().toISOString().slice(0,10),u:u||'%'}]).sort((a,b)=>b.s-a.s).slice(0,10);save()}
 const DN=['Pair up','Spot the typo','What does it do?','Lost a letter','CRISPR repair'];
-function lbScr(){const keys=[['orders','Potion orders (shift average)'],['catch','Element Catch (points)'],['formula','Formula Builder (points)'],...DN.map((n,i)=>['dna'+(i+1),'DNA: '+n]),...[['mc','Pick from 6'],['ty','Type it']].reduce((a,m)=>a.concat(CLUE_LV.map(l=>['clue_'+m[0]+l[0],'Clue ladder, '+m[1]+', '+l[1]+' (points)'])),[])];return'<h1>Scores</h1><p class="dim">Saved on this device only.</p>'+keys.map(([k,l])=>`<h2>${l}</h2>${(P.lb[k]||[]).length?`<table class="lb">${P.lb[k].map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.n)}</td><td>${r.s}${r.u==='pts'?' pts':'%'}</td><td class="dim">${r.d}</td></tr>`).join('')}</table>`:'<p class="dim sm">No scores yet.</p>'}`).join('')+`<p class="sm dim">Stars: ${P.stars}. 100 stars make a golden flask.</p>`}
+function lbScr(){const keys=[['orders','Potion orders (shift average)'],['catch','Element Catch (points)'],['formula','Formula Builder (points)'],['pour','Potion Pour (star points)'],...DN.map((n,i)=>['dna'+(i+1),'DNA: '+n]),...[['mc','Pick from 6'],['ty','Type it']].reduce((a,m)=>a.concat(CLUE_LV.map(l=>['clue_'+m[0]+l[0],'Clue ladder, '+m[1]+', '+l[1]+' (points)'])),[])];return'<h1>Scores</h1><p class="dim">Saved on this device only.</p>'+keys.map(([k,l])=>`<h2>${l}</h2>${(P.lb[k]||[]).length?`<table class="lb">${P.lb[k].map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.n)}</td><td>${r.s}${r.u==='pts'?' pts':'%'}</td><td class="dim">${r.d}</td></tr>`).join('')}</table>`:'<p class="dim sm">No scores yet.</p>'}`).join('')+`<p class="sm dim">Stars: ${P.stars}. 100 stars make a golden flask.</p>`}
 function srcScr(){return`<h1>Sources</h1><p class="dim">Facts were checked against these references; each fact card links the one it relies on. Element data (names, masses, phases, melting and boiling points, discoverers) and the element texts come from Wikipedia, via the open Periodic-Table-JSON dataset (CC BY-SA 3.0). Game reactions and ratios are simplified for play. Never try chemistry at home.</p><div class="panel">${Object.values(SRC).map(s=>`<p><a style="color:var(--c1)" href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a><br><span class="sm dim">${s[1]}</span></p>`).join('')}<p><a style="color:var(--c1)" href="https://github.com/Bowserinator/Periodic-Table-JSON" target="_blank" rel="noopener">Periodic-Table-JSON</a></p></div>`}
 // ---------- element table + quests
 function tableScr(){const t=S.tab;let h='<h1>Elements</h1><div class="tabs"><button class="btn '+(t=='table'?'on':'')+'" data-a="tab" data-i="table">Table</button><button class="btn '+(t=='quest'?'on':'')+'" data-a="tab" data-i="quest">Quests</button><button class="btn '+(t=='cmp'?'on':'')+'" data-a="tab" data-i="cmp">Compounds</button></div>';
@@ -917,7 +978,7 @@ ${nq?`<div class="panel glow"><span class="sticker">Quest!</span> ${esc(nq.q.txt
 +branch('bio',['#5ad6a6','#2fb98b'],icon('dna','#7aa8ff','#ffe066'),'Biology','Cells, genes, living things',bb('bio','Biology lessons','Cells, blood, bones','#c9f5e4')+bb('dnamenu','DNA clinic','Fix the typos!','#ffe9a8'))
 +branch('phy',['#7a9bff','#7a5cff'],icon('atom','#ffe066','#7aa8ff'),'Physics','Forces, light, energy',bb('phys','Physics bench','Play with ideas','#d9e4ff','1'))
 +branch('inv',['#c0b6c8','#a89fb4'],icon('bulb','#d8d0de','#9a92a6'),'Inventions','Coming soon: unlock the big ideas',`<div class="bb w" style="--bc:#efe9f3;box-shadow:0 4px 0 #a89fb4;border-color:#a89fb4;color:#8a7f96">Locked<small>Keep playing to open it</small></div>`,1)
-+`<div class="bbtns" style="padding:0;background:none"><div class="bonus-row"><button class="bbonus" data-bonus="catch" id="opencatch"><b>Element Catch</b><span>Tap the falling element you need</span></button><button class="bbonus" data-bonus="formula" id="openformula"><b>Formula Builder</b><span>Build real compounds atom by atom</span></button></div>${bb('lb','Scores','On this device','#ffe9a8',1)}</div><p class="dim sm" style="text-align:center;margin-top:16px"><a href="#" data-a="go" data-s="src">Sources</a> \u00B7 <a href="#" data-a="chg">Change alchemist</a></p>`}
++`<div class="bbtns" style="padding:0;background:none"><div class="bonus-row"><button class="bbonus" data-bonus="catch" id="opencatch"><b>Element Catch</b><span>Tap the falling element you need</span></button><button class="bbonus" data-bonus="formula" id="openformula"><b>Formula Builder</b><span>Build real compounds atom by atom</span></button><button class="bbonus" data-bonus="pour" id="openpour"><b>Potion Pour</b><span>Sort 100 layered brews</span></button></div>${bb('lb','Scores','On this device','#ffe9a8',1)}</div><p class="dim sm" style="text-align:center;margin-top:16px"><a href="#" data-a="go" data-s="src">Sources</a> \u00B7 <a href="#" data-a="chg">Change alchemist</a></p>`}
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('button,.bb,.mbox,.chip,.tile'))return;for(let i=0;i<6;i++){const d=document.createElement('i');d.className='spk';d.style.left=(e.clientX-8)+'px';d.style.top=(e.clientY-8)+'px';const a=Math.random()*6.28,r=24+Math.random()*26;d.style.setProperty('--dx',Math.cos(a)*r+'px');d.style.setProperty('--dy',Math.sin(a)*r+'px');document.body.appendChild(d);setTimeout(()=>d.remove(),750)}try{if(P.sound)sfx.pop()}catch(_){}},true);
 
 // ---------- shared arcade character (read-only)
@@ -2030,11 +2091,326 @@ function formulaBuilder(){
   next();
 }
 
+
+/* ---------- Potion Pour: sort 100 layered brews ----------
+   Original water-sort-style puzzle for Neon Lab. Tap a tube to lift its top
+   colour, tap another tube to pour. A pour is allowed onto a matching top
+   colour or an empty tube. A brew is finished when every tube holds a single
+   colour (or is empty). All 100 boards are generated offline with a recorded
+   solution, so every level is guaranteed solvable. */
+var PP_CAP=4;
+var PP_POTIONS=[
+  ['#e01e2b','Ember'],     // red
+  ['#ff9f43','Amber'],     // orange
+  ['#ffd32a','Honey'],     // yellow
+  ['#a3e635','Lime'],      // lime
+  ['#2ed573','Meadow'],    // green
+  ['#10ac84','Lagoon'],    // teal
+  ['#00d2d3','Glacier'],   // cyan
+  ['#54a0ff','Sky'],       // sky blue
+  ['#3742fa','Sapphire'],  // deep blue
+  ['#6c5ce7','Twilight'],  // indigo
+  ['#a55eea','Violet'],    // violet
+  ['#f1f2f6','Moonlight']  // white
+];
+var PP_LEVELS=[{"b":[[1,2,2,2],[1,1,1,0],[2],[],[0,0,0]],"par":4},{"b":[[0,1,1,2],[],[2,2,1,1],[],[2,0,0,0]],"par":6},{"b":[[0],[1,1,1,1],[2,0,0],[2,2,2,0],[]],"par":4},{"b":[[0,1,1,1],[],[],[0,0,1,2],[0,2,2,2]],"par":6},{"b":[[],[0,0],[2,0,1],[1,1,1,0],[2,2,2]],"par":6},{"b":[[0,0,2],[1,1,1,0],[],[2,2,2,1],[3,3],[0,3,3]],"par":7},{"b":[[0,0,3],[1,1,1,3],[2,1,0,0],[3,3],[],[2,2,2]],"par":7},{"b":[[0,0,3,3],[1,1,1],[],[3,3],[0,2,2,2],[2,1,0]],"par":6},{"b":[[1,1,3,3],[1,1],[2,3,2],[3,2,2],[0,0,0,0],[]],"par":8},{"b":[[0,0,3,3],[],[2],[3,2,2,2],[1,1,0,0],[1,1,3]],"par":6},{"b":[[0,0,0],[1,2,4],[2,2,2,4],[],[4,0,1,1],[1,4],[3,3,3,3]],"par":9},{"b":[[],[1,1],[2,2,2,2],[4,3,3,3],[4,4,4,0],[0,3,0,0],[1,1]],"par":11},{"b":[[0,0],[1,4,4],[2,1,1,3],[],[3,3,0],[3,4,2,0],[1,2,2,4]],"par":12},{"b":[[],[0,0],[2,2,4],[3,3,3,4],[4,0,1],[1,1,0,4],[2,2,3,1]],"par":11},{"b":[[0,0,0,3],[2,2,2],[3,1,2],[3,3,1],[4,0,1],[4,4,4,1],[]],"par":11},{"b":[[0,3,4],[1,1,0],[2,2,3],[],[4,3,3,0],[1,1,0,2],[2,4,4]],"par":11},{"b":[[0,0,2,2],[3,3,3,2],[],[1,4,4],[4,4],[0,0,2],[3,1,1,1]],"par":9},{"b":[[0,2,2],[1,0,3,3],[2],[],[4,4,4,4],[1,1,3,3],[2,1,0,0]],"par":8},{"b":[[0,2],[],[2,0,0,0],[1,1,3,3],[4,4,4,4],[1,1],[3,3,2,2]],"par":11},{"b":[[0,0,0,0],[3,3,3],[1,1,1,4],[2,2,1,3],[4,4,4],[2,2],[]],"par":8},{"b":[[0,0,0,2],[2],[],[3,3,0,2],[4,4,4,1],[5,5,1,2],[3,4,3,1],[5,5,1]],"par":13},{"b":[[0,0,0,4],[],[4,4,5,2],[3,3],[4,0,2],[5,5,5,1],[2,2,1,1],[3,3,1]],"par":12},{"b":[[0,0,5,2],[1,1,1,4],[2,2,4,4],[3,3,5,4],[5],[5,1,2],[],[3,3,0,0]],"par":13},{"b":[[0,0,1],[],[2,2,3,1],[3,3,0],[4,4],[5,5,3,1],[5,1,4,4],[2,2,0,5]],"par":12},{"b":[[0,1,1,3],[1,4,1,0],[2,2,2],[3,3,0],[4,4,2],[5,5,5,0],[],[4,5,3]],"par":12},{"b":[[0,0,0,5],[],[2,2,1],[3,4,4,4],[4,5,1],[2,0,3,1],[5,5],[2,3,3,1]],"par":15},{"b":[[1],[],[2,2,2,2],[3,4,3,1],[4,3,1,1],[0,0,0,0],[5,3,5],[5,4,4,5]],"par":14},{"b":[[],[1,2,0,0],[0],[3,3,3,4],[4,1,2,0],[1,1,2],[5,5,5,2],[4,4,3,5]],"par":15},{"b":[[0,0,0,1],[1,1,5,4],[2,4,4,3],[3],[],[5,5,5,2],[1,0,3],[2,2,4,3]],"par":14},{"b":[[0,0,3,5],[1,1,1,3],[2,2,0,2],[3,3,5],[],[5,4,4,4],[1,2],[5,0,4]],"par":12},{"b":[[0,5,1,4],[],[2,0,0,6],[3,3,5,4],[1],[5,5,6],[6,1,4,1],[2,2,2,0],[3,3,6,4]],"par":18},{"b":[[0,0,5,3],[1,1,0,5],[2,2,2,4],[2,1,1,4],[4,4,3],[5,0,3],[],[6,6,6],[5,3,6]],"par":18},{"b":[[],[0,0],[2,2,3,1],[3,3,1,5],[4,4,4,6],[4,5,1,5],[6,6,6,3],[2,2,1,0],[5,0]],"par":17},{"b":[[0,5,5,2],[3,3],[2,2,1,3],[],[4,4,0,1],[5,0,2,1],[6,6,6,0],[3,1],[4,4,5,6]],"par":18},{"b":[[],[1,4,5],[2,2,1],[3,0,5],[4,4,2,1],[5,3,0,0],[6,6,2,3],[1,5,0,3],[6,6,4]],"par":17},{"b":[[0,4,6],[],[2,6],[3,1,1],[4,4,2,3],[5,6,2,1],[6,3,3,1],[0,0,0,4],[5,5,5,2]],"par":15},{"b":[[0,0,0,2],[1,1,1,6],[0,3,3,1],[3,3,5],[4,4,2,5],[6,5,2,6],[],[5,6],[4,4,2]],"par":18},{"b":[[0,0,3,5],[1,1,5,5],[0,0,3],[3,1,2],[4,3,2],[],[6,6,4],[6,6,1,2],[5,4,4,2]],"par":16},{"b":[[0,0,0,6],[1,2,5,4],[],[3,3,1,4],[4,4],[5,5,1,3],[6,6,3,1],[0,5,6],[2,2,2]],"par":15},{"b":[[0,3,6],[1,3,3,1],[2,2,2,0],[],[4,4,2,0],[5,5,0],[5,5,6,3],[4,4,6,1],[6,1]],"par":18},{"b":[[0,0,5,6],[5,5,4,6],[],[0,0,4,1],[4,2,2,3],[5,3,2],[6,6,2],[7,7,1,1],[1,4,7],[3,3,7]],"par":21},{"b":[[0,7,6,4],[1,1,7,4],[2,2,0,5],[3,3,3,4],[],[1,0,0,7],[6,4],[7,6,2],[5,5,1,6],[3,5,2]],"par":21},{"b":[[3,3,0,7],[1,1,1,7],[2,2,2,7],[3,2],[4,3,7],[5,1,6,4],[6,6,6,4],[],[4,0,0],[5,5,5,0]],"par":17},{"b":[[0,0,0,6],[],[2,1],[5,5,7],[4,4,7,2],[5,6,5,2],[6,6,1],[7,3,2,3],[4,3,1,1],[4,3,0,7]],"par":20},{"b":[[],[1,1,6,6],[2,2,4,6],[3,3,3,4],[4,4,2],[5,7,2,0],[6,0],[7,1,1,0],[5,7,3],[7,5,5,0]],"par":18},{"b":[[],[],[2,7,7,1],[3,3,3,1],[4,1,0,0],[5,5,1,0],[3,6,7,0],[7,5,5,4],[2,2,2,4],[6,6,6,4]],"par":20},{"b":[[0,2,2],[1,7,5,0],[5,4,0],[3,3,3,4],[4,4,2],[5,6,0],[6,6,5,6],[7,1,1,2],[7,7,1,3],[]],"par":21},{"b":[[0,0,1,7],[1,7,7,6],[2,2,6,3],[],[4,4,4,1],[5,5,5,1],[6,3,0,6],[7,2,2,3],[5,4,0],[3]],"par":18},{"b":[[0,1,4,1],[],[2,4,0],[3,3,3,0],[4,2,1,1],[5,5,0],[6,6,7,7],[5,4],[3,6,6,2],[7,7,5,2]],"par":18},{"b":[[0,3,3],[],[2,2,2,7],[4,7,7,0],[6,6,4],[5,5,0,3],[6,6,4,0],[7,1],[3,2,4,1],[1,1,5,5]],"par":20},{"b":[[0,3,3,1],[0,6],[2,1,8,1],[3,3,0,6],[4,4,4,1],[5,5,5,4],[6,8,6],[7,0,8],[],[7,7,7,5],[2,2,2,8]],"par":21},{"b":[[0,0,4,2],[1,1,0,1],[],[5,4,3,3],[3,2],[5,5,6,2],[6,2],[7,7,7,6],[8,8,8,5],[1,4,7,3],[8,0,4,6]],"par":22},{"b":[[6,0,6],[1,1,0],[2,2,1,4],[3,3,2,5],[7,7,4],[5,5,5,1],[6,0,7],[7,3,0,4],[8,8,3,4],[],[8,8,2,6]],"par":22},{"b":[[1,1,2,3],[],[6,6,1,3],[2,0,8,3],[4,4,2],[5,5,5,7],[6,6,0,1],[7,7,7,0],[8,8,8,0],[5,4,4,2],[3]],"par":22},{"b":[[0,0,0,4],[0,4,4,7],[2,2,2,8],[],[4,3],[5,5,6,3],[8,8,8,2],[7,7,7,3],[3,6],[5,5,6,1],[1,1,1,6]],"par":21},{"b":[[0,7,1,6],[1],[2,2,1,4],[3,3,3,6],[],[5,5,6,1],[6,8,8],[8,4,4,4],[8,3,5,2],[0,0,0,5],[7,7,7,2]],"par":22},{"b":[[0,2,0,2],[],[2],[3,1,1,8],[4,0,2],[5,1,1,5],[6,6,7,4],[7,7,7,4],[6,6,5,0],[8,8,8,5],[3,3,3,4]],"par":23},{"b":[[0,7,0,5],[1,0,0,2],[],[3,3,1,2],[4,6,8,7],[5,5,2],[6,6,6,3],[7,7,3,5],[8,8,8,4],[4,1],[4,1,2]],"par":20},{"b":[[],[6,2,5,0],[2,7,0],[3,3,3,4],[4,0],[5,5,8,7],[6,6,4],[7,2,5,7],[8,8,3,0],[1,1,8,4],[1,1,2,6]],"par":23},{"b":[[0,2],[1,3,0,1],[0,2],[6,6,3,2],[6,6,0,3],[5,5,5,3],[],[7,7,7,1],[8,8,8,5],[4,4,7,8],[4,4,1,2]],"par":23},{"b":[[0,0,0,6],[],[0,7,4,9],[3,3,3,8],[4,5,2],[5,5,5,3],[6,8,9,6],[4,1],[8,6,1,1],[9,7,2],[2,2,9,7],[8,4,7,1]],"par":27},{"b":[[0,0,5,0],[1,1,1,7],[],[7,8,4,5],[4,3,3,5],[2,2],[6,6,6,4],[7,7,8,4],[8,3,2],[9,9,0],[6,9,1,2],[3,9,8,5]],"par":24},{"b":[[4,4,0,6],[1,1,7,9],[],[3,3,1,8],[4,4,5,9],[5,5,6,2],[6,8,8,5],[7,7,7,0],[8,2,9,2],[],[1,0,2,9],[6,3,3,0]],"par":27},{"b":[[],[1,5,4,1],[2,2,5,8],[3,3,4,9],[4,0,1,0],[5,1,0],[3,3,2,9],[7,7,7,4],[8,8,8,5],[9,0],[6,6,2,7],[6,6,9]],"par":24},{"b":[[0,0,0,4],[1,7],[2,2,2,9],[8,8,4,3],[9,0,7],[5,5,6,2],[6,4,4,6],[7,6,3],[8,8,5,9],[],[1,1,1,9],[3,3,5,7]],"par":23},{"b":[[1,2,0,3],[1,1,1,0],[2,5,0,3],[],[4,4,4,9],[5,5,0,8],[6,6,6,2],[7,7,7,8],[2,8,3],[9,9,4,5],[3],[9,8,7,6]],"par":27},{"b":[[],[1,1,1,7],[2],[3,8,8,9],[4,3,0,4],[5,4,0,0],[6,6,7,0],[7,7,9,2],[1,4,2],[9,3,3,9],[6,6,8,5],[5,5,8,2]],"par":24},{"b":[[0,0,0,7],[1,1,5,7],[],[3,3,4,0],[4,4,1,6],[5,5,8,1],[6,9,2,2],[6,2,9],[8,7,9],[9,7],[8,8,6,2],[3,3,4,5]],"par":25},{"b":[[0,2,7,8],[1,4,1],[2,6,6,5],[3,3,2,4],[4,1,8,8],[],[6,9,4,1],[7,7,7,9],[8],[5,5,5,9],[2,6,3,3],[0,0,0,9]],"par":26},{"b":[[0,0,9,1],[],[7,7,7],[5,4,1],[4,4,2],[5,8,5,8],[6,6,6,0],[1,1,4],[8,0,9,2],[9,6,8,2],[7,3,3,2],[5,3,3,9]],"par":26},{"b":[[0,0,0,10],[1,7,0,5],[2,2,1,4],[3,2,6,5],[4],[],[6,6,8,10],[7,1,2,8],[9,3,3,6],[9,9,1,8],[10,10,4,5],[8,4,5],[9,7,7,3]],"par":29},{"b":[[0,2,1,2],[],[8],[3,3,0,1],[4,4,4,9],[5,8,2],[6,9,3,0],[7,10,3,0],[8,4,5,10],[9,9,1,2],[10,10,5,8],[7,7,7,5],[6,6,6,1]],"par":27},{"b":[[0,9,5,2],[1,1,0,10],[2,2,0,10],[3,3,1,7],[4,4,4,9],[5,5,1,6],[],[6,6,6,10],[8,3,3,9],[9,0,2,8],[],[7,7,7,10],[4,8,8,5]],"par":29},{"b":[[0,4,4,9],[1,1,6],[6,9,9,7],[3,3,3,4],[6,5,0],[],[2,2,0],[7,5,8,7],[8,6,7],[9,8,5,8],[10,10,10,0],[1,1,3,10],[2,2,4,5]],"par":29},{"b":[[],[1,1,2,6],[],[8,8,5,7],[4,4,4,10],[5,2,2,3],[6,6,0,3],[7,7,7,6],[8,8,5,2],[9,9,9,5],[10,10,10,9],[4,1,0,1],[0,3,0,3]],"par":27},{"b":[[],[1,1,5,7],[10,2,9],[3,3,3,8],[4,4,10,6],[5,5,5,3],[0,0,10,10],[7,7,0,9],[8,6,6,9],[9],[8,4,7,4],[1,1,2,0],[2,2,8,6]],"par":28},{"b":[[0,0,3,1],[3,7,1,3],[2,2,6,8],[1],[4,5,5,3],[4,4,4,5],[6,6,10],[2,2,5,9],[8,8,9,1],[9,9,8,10],[10,10,0,6],[],[7,7,7,0]],"par":29},{"b":[[0,6,6,10],[1,1,7],[9,9,3],[3,2,2,0],[4,5,5,8],[9,9,1,6],[],[7,7,10,3],[8,6],[2,0,8,7],[10,10,8,0],[4,4,4,3],[5,5,1,2]],"par":28},{"b":[[0,0,8,3],[1,1,4,10],[2,2,9,9],[3,3,10],[6,5,5,7],[7,0,5,1],[6,8,3,1],[7,4,2,2],[8,8,0,7],[9],[],[6,6,5,4],[4,10,10,9]],"par":27},{"b":[[0,0,0,5],[1,1,1,7],[3,4,4,5],[3,5,2,10],[8,10],[5,7,10],[6,6,1,7],[7,0,4,8],[],[9,9,9,2],[2,2,9,8],[3,3,4,8],[6,6,10]],"par":27},{"b":[[0,0,1,1],[4,4],[2,6,8,0],[3,3,3,5],[4,8],[5,5,9,8],[6,2,2,6],[7,7,7,10],[],[9,5,8,4],[7,9,3,1],[6,10,10,0],[1,2,10,9]],"par":28},{"b":[[0,0,0,9],[1,1,1,6],[2,3,9,7],[3,6,10,3],[4,4,4,9],[5,5,5,7],[6,2,6,10],[],[8,2,7],[9,8,3],[10,10,2,0],[7,4],[8,8,1,5]],"par":27},{"b":[[1,1,9,2],[1,5,5,9],[1,4,3,2],[9,0],[4,4,4,7],[5,5,7,2],[6,6,7,0],[7,10,6,3],[],[9,3,6,3],[10,10,10,0],[0,2],[8,8,8,8]],"par":28},{"b":[[0,3,7,10],[8,8,3,7],[9],[7,7,9],[4,4,4,10],[5,0,1,2],[0,0,6,3],[2,2,10,2],[8,8,1,3],[5,5,5,6],[],[6,6,1,4],[9,9,10,1]],"par":30},{"b":[[8,8,0,6],[1,1,1,4],[10,0,0,6],[3,2,3,2],[4,4,10,9],[],[5],[7,7,7,4],[8,8,9,6],[9,5,9,5],[10,10,3,0],[2,1,7,3],[2,6,5]],"par":30},{"b":[[0,5,3,4],[1,1,0,6],[2,10,6,9],[3,4,9],[4,6,6,10],[5,5,5,2],[9],[7,7,8,7],[8,8,8,10],[],[10,3,7,9],[1,1,3,0],[0,2,2,4]],"par":27},{"b":[[0,0,8,10],[],[2,2,2,6],[4,4,7],[4,4,7,1],[0,0,9],[6,6,1,8],[2,5,3,7],[8,8,5,5],[9,9,6,7],[10,9,10],[3,3,10],[5,1,1,3]],"par":27},{"b":[[0,3,3,2],[1,1,9,5],[],[3,10,2,3],[4,4,1,2],[],[6,6,9,2],[7,7,7,5],[8,8,8,6],[9,9,0,5],[10,10,1,8],[4,10,0,5],[0,6,4,7]],"par":27},{"b":[[5,5,8,9],[],[2,2,2,4],[3,3,3,10],[],[9,10,1,4],[6,6,6,7],[7,7,7,2],[8,8,8,9],[6,5,1,4],[10,10,1,3],[0,0,0,4],[9,0,1,5]],"par":27},{"b":[[1,1,7,2],[6,3,5,4],[0,0,5,2],[8,8,2,10],[4,4,3,4],[],[6,6,6,9],[7,7,10],[8,8,2,10],[9,9,9,5],[10],[0,1,1,7],[3,3,0,5]],"par":29},{"b":[[0,0,0,5],[1,1,3,4],[2,2,11,3],[4,11,9],[10,10,8,9],[5,1,1,7],[6,6,5,7],[7,7,4,8],[],[9,9],[10,10,8],[3,3,11,8],[2,2,6,0],[6,11,5,4]],"par":33},{"b":[[0,0,0,2],[1,2],[],[3,8,8,5],[4,10],[7,3,8,0],[6,6,10,2],[7,7,6,7],[3,3,5,1],[9,6,8,1],[10,10,4,1],[11,11,11,4],[5,5,4,2],[9,9,9,11]],"par":30},{"b":[[0,0,0,9],[1,9,8,7],[],[3,3,3,4],[4,4,11,7],[5,9,1,8],[6,6,6,1],[7,10,8,2],[],[9,5,5,2],[10,10,11,5],[11,8,0,3],[4,6,10,2],[11,1,7,2]],"par":32},{"b":[[0,10,5],[1,1,9,3],[2,2,10,7],[],[4,10,4,7],[5,5,11,9],[8,8,6],[3,3,9,6],[8,8,4,0],[9,0],[1,7,7,3],[11,11,1,11],[6,6,4,10],[2,2,5,0]],"par":30},{"b":[[0,0,3,5],[1],[2,4,8,10],[3,4,5,7],[3,3,10,7],[5,9,9,6],[2,2,2,8],[],[8,7,1],[9,9,0,7],[10,10,8,1],[11,11,11,0],[11,4,4,1],[6,6,6,5]],"par":31},{"b":[[0,0,2,11],[1,1,1,7],[4,3,2,7],[],[4,3,4,10],[5,5,2,0],[6,6,6,0],[7,11,10],[8,8,8,2],[9,5,6,3],[10],[11,5,4,11],[8,1,7,10],[9,9,9,3]],"par":33},{"b":[[0,0,2,9],[1,1,1,4],[8],[3,3,3,11],[0,0,10,5],[5,5,6,9],[6,6,2,8],[7,7,7,1],[9,9,8],[],[10,10,2,5],[11,11,6,8],[2,4,4,10],[4,3,11,7]],"par":33},{"b":[[0,2,10,6],[1,11,8,10],[2,2,0,7],[3,3,10,6],[4,4,4,1],[5,10,3,8],[7,7,5,0],[],[8,8,3,1],[9,9,6,11],[9,9,5],[11,0,11,7],[4,5],[2,1,6]],"par":34},{"b":[[7],[0,11,7,7],[2,2,5,9],[3,3,9,11],[4,10,2,5],[],[4,10,8,8],[1,0,0,1],[8,8,6],[9,3,3,4],[10,5,5,10],[11,0,6,1],[9,4,2,1],[6,6,11,7]],"par":34},{"b":[[0,2,6,9],[1,0],[2,6,8,10],[3,11,3,0],[4,6,10],[5,5,9],[3,3,10,11],[7,7,7,4],[8,8,10,6],[9,9,2,11],[11,0,2,8],[],[1,1,4,7],[5,5,4,1]],"par":32}];
+
+var PP_STAR='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l2 4.1 4.5.6-3.3 3.2.8 4.5L8 11.8 4 14l.8-4.5L1.5 6.3 6 5.7z" fill="FILL"/></svg>';
+function ppStars(n,size){var s='';for(var i=0;i<3;i++)s+=PP_STAR.replace('FILL',i<n?'#ffd32a':'rgba(141,154,200,.35)');return '<span class="pp-stars" style="--ss:'+(size||12)+'px">'+s+'</span>'}
+var PP_LOCK='<svg viewBox="0 0 16 16" aria-hidden="true" width="14" height="14"><path d="M4 7V5a4 4 0 0 1 8 0v2h1v7H3V7h1zm2 0h4V5a2 2 0 0 0-4 0v2z" fill="#8d9ac8"/></svg>';
+function ppState(){
+  try{
+    if(typeof P!=='undefined'){
+      if(!P.pour||typeof P.pour!=='object')P.pour={un:1,st:{}};
+      if(!P.pour.un||P.pour.un<1)P.pour.un=1;
+      if(!P.pour.st)P.pour.st={};
+      return P.pour;
+    }
+  }catch(e){}
+  return {un:1,st:{}};
+}
+function ppTotalStars(st){var t=0;for(var k in st.st)t+=st.st[k];return t}
+function ppCleared(st){var t=0;for(var k in st.st)if(st.st[k]>0)t++;return t}
+
+function potionPour(){
+  var ui=openOv('Potion Pour');
+  var st=ppState();
+  var board=null,level=0,sel=-1,mv=0,undoStack=[],busy=false,won=false;
+  var starBox=el('span','pp-hudstars',ppStars(0,12));
+  var infoBox=el('span','pp-hudinfo','');
+  ui.hud.appendChild(starBox);ui.hud.appendChild(infoBox);
+  function syncHud(){
+    starBox.innerHTML='<span class="pp-total">'+ppStars(1,12)+' '+ppTotalStars(st)+'</span>';
+    infoBox.textContent=ppCleared(st)+'/100';
+  }
+  syncHud();
+
+  var body=ui.body;
+  function clearBody(){body.innerHTML=''}
+
+  /* ---------- level grid ---------- */
+  function showGrid(){
+    clearBody();board=null;won=false;
+    syncHud();
+    var head=el('div','pp-gridhead');
+    head.appendChild(el('div','pp-title','Choose a brew'));
+    var sub=el('div','pp-sub',ppCleared(st)+' of 100 brewed - '+ppTotalStars(st)+' stars');
+    head.appendChild(sub);
+    if(st.cur&&st.cur.mv>0&&st.cur.lv>=1&&st.cur.lv<=st.un){
+      var chip=el('button','pp-resumechip','Resume brew '+st.cur.lv+' ('+st.cur.mv+' pour'+(st.cur.mv===1?'':'s')+')');
+      chip.type='button';
+      chip.addEventListener('click',function(){pop();startLevel(st.cur.lv)});
+      head.appendChild(chip);
+    }
+    body.appendChild(head);
+    var grid=el('div','pp-grid');
+    for(var i=1;i<=100;i++){
+      (function(L){
+        var locked=L>st.un;
+        var c=el('button','pp-cell'+(locked?' locked':(st.st[L]?' cleared':'')),locked?PP_LOCK+'<span>'+L+'</span>':'<b>'+L+'</b>'+(st.st[L]?ppStars(st.st[L],9):''));
+        c.type='button';
+        c.setAttribute('aria-label',locked?('Brew '+L+' locked'):('Play brew '+L+(st.st[L]?(', '+st.st[L]+' stars'):'')));
+        if(!locked)c.addEventListener('click',function(){pop();startLevel(L)});
+        grid.appendChild(c);
+      })(i);
+    }
+    body.appendChild(grid);
+  }
+
+  /* ---------- play ---------- */
+  function persistCur(){
+    try{var S=ppState();S.cur={lv:level,b:board.map(function(t){return t.slice()}),mv:mv,u:undoStack.map(function(u){return u.slice()})};save()}catch(e){}
+  }
+  function clearCur(){
+    try{var S=ppState();if(S.cur){S.cur=null;save()}}catch(e){}
+  }
+  function validCur(cur){
+    if(!cur||cur.lv<1||cur.lv>100||!Array.isArray(cur.b)||!cur.b.length)return false;
+    var n=0;
+    for(var i=0;i<cur.b.length;i++){var t=cur.b[i];if(!Array.isArray(t)||t.length>PP_CAP)return false;n+=t.length}
+    return n>0;
+  }
+  function startLevel(L,forceFresh){
+    level=L;
+    var S=ppState();
+    if(!forceFresh&&S.cur&&S.cur.lv===L&&S.cur.mv>0&&validCur(S.cur)){showResume(L,S.cur);return}
+    dealFresh(L);
+  }
+  function dealFresh(L){
+    level=L;
+    var raw=PP_LEVELS[L-1].b;
+    board=raw.map(function(t){return t.slice()});
+    sel=-1;mv=0;undoStack=[];busy=false;won=false;
+    clearCur();
+    render();
+  }
+  function resumeLevel(cur){
+    level=cur.lv;
+    board=cur.b.map(function(t){return t.slice()});
+    mv=cur.mv;undoStack=(cur.u||[]).map(function(u){return u.slice()});
+    sel=-1;busy=false;won=false;
+    render();
+  }
+  function showResume(L,cur){
+    clearBody();board=null;won=false;
+    var panel=el('div','pp-resume');
+    panel.appendChild(el('div','pp-title','Brew '+L+' in progress'));
+    panel.appendChild(el('div','pp-sub',cur.mv+' pour'+(cur.mv===1?'':'s')+' so far. Pick up where you left off, or deal the same brew fresh - your stars and unlocks stay either way.'));
+    var row=el('div','pp-resumeacts');
+    var rb=el('button','nlo-btn','Resume');rb.type='button';
+    rb.addEventListener('click',function(){pop();resumeLevel(cur)});
+    var fb=el('button','nlo-btn ghost','Fresh deal');fb.type='button';
+    fb.addEventListener('click',function(){pop();dealFresh(L)});
+    var gb=el('button','nlo-btn ghost','All brews');gb.type='button';
+    gb.addEventListener('click',function(){showGrid()});
+    row.appendChild(rb);row.appendChild(fb);row.appendChild(gb);
+    panel.appendChild(row);
+    body.appendChild(panel);
+  }
+  function par(){return PP_LEVELS[level-1].par}
+  function topGroup(t){
+    if(!t.length)return null;
+    var c=t[t.length-1],g=0;
+    for(var i=t.length-1;i>=0&&t[i]===c;i--)g++;
+    return {c:c,g:g};
+  }
+  function legalMoves(){
+    var res=[];
+    for(var i=0;i<board.length;i++){
+      var g=topGroup(board[i]);
+      if(!g)continue;
+      for(var j=0;j<board.length;j++){
+        if(j===i)continue;
+        var t=board[j];
+        if(t.length>=PP_CAP)continue;
+        if(!t.length||t[t.length-1]===g.c)res.push([i,j]);
+      }
+    }
+    return res;
+  }
+  function tubeDone(t){return t.length===PP_CAP&&t.every(function(x){return x===t[0]})}
+  function isWin(){
+    return board.every(function(t){return !t.length||tubeDone(t)});
+  }
+
+  function render(){
+    clearBody();
+    body.style.overflowY='';
+    var top=el('div','pp-playtop');
+    var backB=el('button','nlo-btn ghost','\u25C0 Brews');backB.type='button';
+    backB.addEventListener('click',function(){showGrid()});
+    var lv=el('div','pp-lv','Brew '+level+'<span class="pp-par">target '+par()+' pours</span>');
+    var mvB=el('div','pp-mv',String(mv)+'<span class="pp-par">pours</span>');
+    top.appendChild(backB);top.appendChild(lv);top.appendChild(mvB);
+    body.appendChild(top);
+
+    var bw=el('div','pp-board');
+    board.forEach(function(t,i){
+      var tb=el('button','pp-tube'+(i===sel?' pp-sel':'')+(tubeDone(t)?' pp-done':''));
+      tb.type='button';
+      tb.setAttribute('aria-label','Tube '+(i+1)+(t.length?(', top colour '+PP_POTIONS[t[t.length-1]][1]):', empty'));
+      var glass=el('span','pp-glass');
+      t.forEach(function(c,idx){
+        var ly=el('span','pp-layer'+(idx===t.length-1?' pp-surface':''));
+        ly.style.bottom=(idx*25)+'%';
+        ly.style.height='25%';
+        ly.style.background='radial-gradient(circle at 32% 38%,rgba(255,255,255,.30) 0 2px,transparent 3px),radial-gradient(circle at 62% 66%,rgba(255,255,255,.20) 0 1.5px,transparent 2.5px),linear-gradient(115deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,.08) 26%,rgba(255,255,255,0) 46%),linear-gradient(180deg,'+shade(PP_POTIONS[c][0],24)+' 0%,'+PP_POTIONS[c][0]+' 38%,'+shade(PP_POTIONS[c][0],-28)+' 100%)';
+        ly.setAttribute('data-c',c);
+        glass.appendChild(ly);
+      });
+      tb.appendChild(glass);
+      tb.addEventListener('click',function(){tap(i,tb)});
+      bw.appendChild(tb);
+    });
+    body.appendChild(bw);
+
+    var hint=el('div','pp-hint','');
+    hint.id='pphint';
+    hint.textContent=sel>=0?'Now tap a tube to pour into - matching colour or empty.':'Tap a tube to lift its top colour.';
+    body.appendChild(hint);
+
+    var acts=el('div','pp-acts');
+    var undoB=el('button','nlo-btn ghost','Undo');undoB.type='button';
+    undoB.disabled=!undoStack.length;
+    undoB.addEventListener('click',function(){doUndo()});
+    var reB=el('button','nlo-btn ghost','Restart');reB.type='button';
+    reB.addEventListener('click',function(){pop();startLevel(level,true)});
+    acts.appendChild(undoB);acts.appendChild(reB);
+    body.appendChild(acts);
+  }
+  function shade(hex,amt){
+    var n=parseInt(hex.slice(1),16),r=(n>>16)+amt,g=((n>>8)&255)+amt,b=(n&255)+amt;
+    r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));
+    return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+  }
+  function setHint(t){var h=document.getElementById('pphint');if(h)h.textContent=t}
+
+  function tap(i){
+    if(busy||won)return;
+    if(sel<0){
+      if(!board[i].length){setHint('That tube is empty - pick one with a colour on top.');return}
+      sel=i;pop();render();return;
+    }
+    if(sel===i){sel=-1;render();return}
+    var g=topGroup(board[sel]);
+    var t=board[i];
+    if(t.length>=PP_CAP||(t.length&&t[t.length-1]!==g.c)){
+      var tb=body.querySelectorAll('.pp-tube')[i];
+      if(tb){tb.classList.add('pp-shake');setTimeout(function(){if(tb.classList)tb.classList.remove('pp-shake')},350)}
+      setHint(t.length>=PP_CAP?'That tube is full.':(PP_POTIONS[g.c][1]+' can only pour onto '+PP_POTIONS[g.c][1]+' or an empty tube.'));
+      return;
+    }
+    pour(sel,i,g);
+  }
+
+  function pour(from,to,g){
+    busy=true;
+    var amt=Math.min(g.g,PP_CAP-board[to].length);
+    undoStack.push([from,to,amt]);
+    mv++;
+    var tubes=body.querySelectorAll('.pp-tube');
+    var st=tubes[from],tt=tubes[to];
+    var sr=st.getBoundingClientRect(),tr=tt.getBoundingClientRect();
+    var dir=(tr.left+tr.width/2)<(sr.left+sr.width/2)?-1:1;
+    // lift + tilt source, grow a stream into the target
+    st.classList.add('pp-pouring');
+    var tdx=Math.max(-70,Math.min(70,(tr.left-sr.left)*0.35));st.style.transform='translate('+tdx+'px,-18px) rotate('+(dir*22)+'deg)';
+    var stream=el('span','pp-stream');
+    stream.style.background='linear-gradient(180deg,'+PP_POTIONS[g.c][0]+','+shade(PP_POTIONS[g.c][0],-18)+')';
+    stream.style.left=((sr.left+tr.left)/2+sr.width*0.5*dir)+'px';
+    stream.style.top=(Math.min(sr.top,tr.top)+6)+'px';
+    stream.style.height=(Math.abs(tr.top-sr.top)+tr.height*0.5)+'px';
+    body.appendChild(stream);
+    pop();
+    setTimeout(function(){
+      // mutate state and re-render with a fill pulse on the target
+      for(var k=0;k<amt;k++)board[to].push(board[from].pop());
+      sel=-1;
+      st.classList.remove('pp-pouring');
+      stream.remove();
+      render();
+      var nt=body.querySelectorAll('.pp-tube')[to];
+      if(nt){nt.classList.add('pp-filled');setTimeout(function(){if(nt.classList)nt.classList.remove('pp-filled')},400)}
+      busy=false;
+      if(isWin()){clearCur();winSeq()}
+      else{persistCur();if(!legalMoves().length)setHint('No pours left - use Undo or Restart.')}
+    },420);
+  }
+
+  function doUndo(){
+    if(busy||won||!undoStack.length)return;
+    var u=undoStack.pop();
+    for(var k=0;k<u[2];k++)board[u[0]].push(board[u[1]].pop());
+    mv--;sel=-1;pop();render();
+    if(mv>0)persistCur();else clearCur();
+  }
+
+  function winSeq(){
+    won=true;
+    var stars=mv<=par()?3:(mv<=Math.ceil(par()*1.4)+1?2:1);
+    var prev=st.st[level]||0;
+    if(stars>prev)st.st[level]=stars;
+    if(level===st.un&&st.un<100)st.un=level+1;
+    try{save()}catch(e){}
+    var total=ppTotalStars(st);
+    try{
+      var old=best('nl.pour.stars.v1');
+      if(total>old){saveBest('nl.pour.stars.v1',total);lbAdd('pour',total,'pts')}
+    }catch(e){}
+    try{if(typeof sfx!=='undefined'&&P.sound)sfx.quest()}catch(e){}
+    syncHud();
+    setTimeout(function(){
+      body.style.overflowY='auto';
+      var hh=document.getElementById('pphint');if(hh)hh.textContent='';
+      var c=el('div','nlo-center pp-win');
+      c.appendChild(el('h2',null,'Brew '+level+' settled!'));
+      var srow=el('div','pp-bigstars',ppStars(stars,26));
+      c.appendChild(srow);
+      c.appendChild(el('p',null,'Sorted in '+mv+' pours (target '+par()+'). '+ppCleared(st)+' of 100 brews settled.'));
+      if(level<100){
+        var next=el('button','nlo-btn','Next brew \u25B6');next.type='button';
+        next.addEventListener('click',function(){pop();startLevel(level+1)});
+        c.appendChild(next);
+      }else{
+        c.appendChild(el('p',null,'All 100 brews settled. Master alchemist!'));
+      }
+      var again=el('button','nlo-btn ghost','Replay');again.type='button';
+      again.addEventListener('click',function(){pop();startLevel(level)});
+      var all=el('button','nlo-btn ghost','All brews');all.type='button';
+      all.addEventListener('click',function(){showGrid()});
+      c.appendChild(again);c.appendChild(all);
+      body.appendChild(c);
+    },450);
+  }
+
+  showGrid();
+}
+
 document.addEventListener('click',function(ev){
   var t=ev.target&&ev.target.closest?ev.target.closest('[data-bonus]'):null;
   if(!t)return;
   ev.preventDefault();ev.stopPropagation();
-  if(t.getAttribute('data-bonus')==='catch')elementCatch();else formulaBuilder();
+  var bb=t.getAttribute('data-bonus');if(bb==='catch')elementCatch();else if(bb==='pour')potionPour();else formulaBuilder();
 },true);
 })();
 
