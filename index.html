@@ -271,7 +271,7 @@ if(document.body)mk();else document.addEventListener("DOMContentLoaded",mk)})();
 .pp-hint{text-align:center;font-size:12px;color:var(--dim,#8d9ac8);padding:2px 14px 6px;min-height:20px}
 .pp-acts{display:flex;gap:10px;justify-content:center;padding:6px 12px 16px}
 .pp-acts .nlo-btn:disabled{opacity:.45}
-.pp-win{text-align:center;background:var(--pan,#fcfcff);border:3px solid var(--ink,#3b3a6b);border-radius:18px;padding:20px 18px;width:min(400px,calc(100% - 40px));margin:0;box-shadow:0 8px 0 rgba(59,58,107,.3);z-index:6;position:relative}
+.pp-win{text-align:center;background:var(--pan,#fcfcff);border:3px solid var(--ink,#3b3a6b);border-radius:18px;padding:20px 18px;width:min(400px,calc(100% - 40px));box-shadow:0 8px 0 rgba(59,58,107,.3),0 0 0 9999px rgba(7,10,28,.55);position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:90;display:flex;flex-direction:column;align-items:center;gap:4px}
 .pp-win .pp-bigstars svg{animation:pp-starpop .5s cubic-bezier(.34,1.6,.44,1) both}
 .pp-win .pp-bigstars svg:nth-child(2){animation-delay:.15s}
 .pp-win .pp-bigstars svg:nth-child(3){animation-delay:.3s}
@@ -2382,7 +2382,7 @@ function potionPour(){
     setTimeout(function(){
       body.style.overflowY='auto';
       var hh=document.getElementById('pphint');if(hh)hh.textContent='';
-      var c=el('div','nlo-center pp-win');
+      var c=el('div','pp-win');
       c.appendChild(el('h2',null,'Brew '+level+' settled!'));
       var srow=el('div','pp-bigstars',ppStars(stars,26));
       c.appendChild(srow);
